@@ -1,4 +1,3 @@
-console.log(temps()+" : début de '_composants.js' ");
 
 // un composant est une fonction qui renvoie de l'html (ou une variable avec de l'html)
 // pour l'instant, c'est utilisé via la classe 'sync' 
@@ -250,11 +249,14 @@ function htmlQuetesLongues(){
 }
 
 function htmlGraphiques(){
+	//ca serai bien de mettre 48h au lieu de 24h...
 	// 24h pour commencer, avec les points
 	let s=`<div class="histogramme">`;
 	let max=0;
 	let indexMax=0;
-	for (let i=0; i<24;i++){
+	let pointsSurLaPeriode=0;
+	for (let i=0; i<48;i++){
+		pointsSurLaPeriode+=user.seriePointsHeures[i];
 		if(user.seriePointsHeures[i]>max){
 			max=user.seriePointsHeures[i];
 			indexMax=i;
@@ -264,7 +266,7 @@ function htmlGraphiques(){
 		s="Pas de données à afficher";
 	}
 	else{
-		for (let i=0; i<24;i++){
+		for (let i=0; i<48;i++){
 			s+=`<div class="histogramme-colonne">
 					<!-- ici, soit un div avec hauteur non maximale, soit plusieurs divs-->
 					<div class="histogramme-barre" style="height:${100*user.seriePointsHeures[i]/max}%"></div>
@@ -272,7 +274,7 @@ function htmlGraphiques(){
 		}
 
 		s+="</div>";
-		s+=`<div class="histogramme-legende">${user.points24h} points gagnés ces dernières 24h</div>`;
+		s+=`<div class="histogramme-legende">${pointsSurLaPeriode} points gagnés ces dernières 48h</div>`;
 	}
 	return s;
 }
@@ -403,6 +405,3 @@ function depilerMessage(but="themes"){ // attention ceci affecte l'objet global 
 	// on rend visible :
 	document.getElementById('message').style.display="block";
 }
-
-
-console.log(temps()+" : fin de '_composants.js' ");

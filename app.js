@@ -17,7 +17,6 @@
 
 
 
-console.log(temps()+" : début de '_app.js' ");
 
 let timeoutQuiz; // gestion timer du lancement automatique des quiz
 
@@ -1300,5 +1299,3 @@ coder quelques loader reliés aux maths, qui ne seront pas partout djavus
 
 
 */
-
-console.log(temps()+" : fin de '_app.js' ");

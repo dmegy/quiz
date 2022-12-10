@@ -11,20 +11,6 @@
     <meta name="description" content="Quiz de Mathématiques: questionnaires vrai ou  faux de niveau L1, Terminale S, maths sup">
     <meta name="author" content="Damien Mégy">
     <title>Quiz de Mathématiques</title>
-    <script type="text/javascript">
-    	const t0=new Date().getTime();
-    	function temps(){
-    		return (new Date().getTime() - t0)+"ms";
-    	}
-    	console.log(temps()+" : top départ");
-
-			document.addEventListener("DOMContentLoaded", ()=>{
-				console.log(temps()+" : évènement DOMContentLoaded");
-			});
-			document.addEventListener("load", ()=>{
-				console.log(temps()+" : évènement load");
-			});
-    </script>
     <meta name="theme-color" content="#081017"><!-- #00417a pour le bleu-->
 
     <meta name="twitter:card" content="summary_large_image">
@@ -332,7 +318,16 @@
   	</style>
 
 
-  	
+  	<!-- - - - le temps que les polices arrivent, on lance les connexions - - -->
+
+		<link rel="preload" href="questions.js" as="script">
+  	<link rel="preload" href="themes.js" as="script">
+  	<link rel="preload" href="fonctions.js" as="script">
+  	<link rel="preload" href="composants.js" as="script">
+  	<link rel="preload" href="app.js" as="script">
+  	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
+		<link href="style.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+
 
 		
 
@@ -360,16 +355,7 @@
 
 		</style>
 		
-		<!-- - - - - - -->
-
-		<link rel="preload" href="questions.js" as="script">
-  	<link rel="preload" href="themes.js" as="script">
-  	<link rel="preload" href="fonctions.js" as="script">
-  	<link rel="preload" href="composants.js" as="script">
-  	<link rel="preload" href="app.js" as="script">
-  	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
-		<link href="style.css" rel="preload" as="style" onload="this.rel='stylesheet'">
-
+		
 		
 		<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" type="image/x-icon">
 		<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png"  type="image/x-icon">
@@ -379,7 +365,7 @@
 		
   	
   	<!-- ceci fait ramer alors que ça devrait pas ! -->
-		<!--<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2018"></script>-->
+		<!--<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2020"></script>-->
 		<script type="text/javascript" defer src="fonctions.js"></script>
 		<script type="text/javascript" defer src="composants.js"></script>
 		<script type="text/javascript" defer src="questions.js"></script>
@@ -394,8 +380,8 @@
 
 		<div class="colonne"  style="display: flex; justify-content: space-between;align-items:center">
 
-			<!-- les quatre icones du menu-->
-			<div class="sync" data-action="toggle" data-param="(etat!='jeu')&&(etat!='fin')">
+			<!-- les quatre icones du menu, masquées tant que le js n'a pas chargé-->
+			<div class="sync" data-action="toggle" data-param="(etat!='jeu')&&(etat!='fin')" style="display:none">
 			
 
 				<div>
@@ -413,8 +399,8 @@
 			</div>
 
 		
-  	<!-- Le compteur global de points-->
-  	<div display="none" class="sync margin-l-r" data-action="toggle" data-param="(etat=='accueil')||(etat=='afficherThemes')||(etat=='info')||(etat=='user')||(etat=='trophees')">
+  	<!-- Le compteur global de points, masqué au début-->
+  	<div style="display:none" class="sync margin-l-r" data-action="toggle" data-param="(etat=='accueil')||(etat=='afficherThemes')||(etat=='info')||(etat=='user')||(etat=='trophees')">
   		<div class="sync" data-action="html" data-param="htmlPoints()">0 pt</div>
 		</div>
 
@@ -498,7 +484,7 @@
 			La navigation se fait au moyen des quatre icônes en haut de l'écran.
 			Pour afficher les thèmes et choisir un quiz, clique sur la seconde icône ou bien sur le bouton suivant :
 		</p>
-		<div style="margin:1rem" onclick="afficherThemes()" class="pointer bouton bouton-coul-primaire" >
+		<div id="boutonAfficherThemes" onclick="afficherThemes()" class="pointer bouton bouton-coul-primaire" >
 			<svg  class="menu svg-icone" viewBox="0 0 512 512"><path d="M64 144c26.5 0 48-21.5 48-48s-21.5-48-48-48S16 69.5 16 96s21.5 48 48 48zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm48-208c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48z"/></svg>
 			Choisir un thème
 		</div>
@@ -674,7 +660,7 @@
 
 	<h3>
 		<svg class="svg-icone fill-secondaire-accent"   viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg>
-		 Activité sur 24h:
+		 Activité sur 48h:
 	</h3>
 
 	<div class="sync margin-l-r" data-action="html" data-param="htmlGraphiques()"></div>
@@ -904,9 +890,6 @@
 		});
 	</script>
 
-	<script>
-		console.log(temps()+" : fin de la lecture d'index.html : ")
-	</script>
 
   </body>
 </html>

@@ -1,19 +1,3 @@
-function toggleCorrection(){
-	let el=document.getElementById("correction");
-	if(el.style.display=="flex"){
-		el.style.display='none';
-		document.getElementById("toggleCorrection").innerHTML=`
-		<svg class="svg-icone" viewBox="0 0 576 512">${svgPathFasEye}</svg>
-		 Afficher la correction`;
-	}
-	else{
-		el.style.display="flex";
-		document.getElementById("toggleCorrection").innerHTML=`
-		<svg class="svg-icone" viewBox="0 0 576 512">${svgPathFasEyeSlash}</svg>
-		 Masquer la correction`;
-
-	}
-}
 
 function getScript(scriptUrl, callback) {
     const script = document.createElement('script');
@@ -268,7 +252,7 @@ const saveTemplateAsFile = (filename, dataObjToWrite) => {
 
 
 
-// - - - -
+// - - - - GESTION DE L'UPLOAD D'AVATAR - - - - - -
 
 // retourne une promesse d'image avec une url loadée dedans
 const loadImage = (url) => new Promise((resolve, reject) => {

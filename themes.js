@@ -4,7 +4,6 @@
 // - - T H E M E S  *E T*  C H A P I T R E S -
 // - - - - - - - - - - - - - - - - - - - - - - 
 
-console.log(temps()+" : début de 'themes.js' ");
 const range = (start, stop) => Array.from({ length: stop - start + 1}, (_, i) => start + i);
 
 
@@ -482,4 +481,3 @@ const _chapitres={
 	}
 };
 
-console.log(temps()+" : fin de 'themes.js' ");

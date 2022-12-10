@@ -529,6 +529,7 @@ button[disabled]{
 	top: -.5rem;
 	right: -.5rem;
 	border-radius: 1rem;
+	color:#c6d7e6;/*un peu plus clair que --c-texte pour plus de contraste*/
 	background-color: var(--c-notif);
 	padding: .1rem .3rem;
 	margin: 0;
