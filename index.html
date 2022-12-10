@@ -330,19 +330,9 @@
 				text-align: center;
 			}
   	</style>
-  	<!-- preloading, pendant que les fontes arrivent-->
-  	<link rel="preload" href="data/_questions.js" as="script">
-  	<link rel="preload" href="data/_themes.js" as="script">
-  	<link rel="preload" href="fonctions.js" as="script">
-  	<link rel="preload" href="composants.js" as="script">
-  	<link rel="preload" href="app.js" as="script">
-  	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
-		<link href="style.css" rel="preload" as="style" onload="this.rel='stylesheet'">
 
-		
-		<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" type="image/x-icon">
-		<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png"  type="image/x-icon">
-		<link rel="manifest" href="/site.webmanifest">
+
+  	
 
 		
 
@@ -374,6 +364,22 @@
 
 		</style>
 		
+		<!-- - - - - - -->
+
+		<link rel="preload" href="data/_questions.js" as="script">
+  	<link rel="preload" href="data/_themes.js" as="script">
+  	<link rel="preload" href="fonctions.js" as="script">
+  	<link rel="preload" href="composants.js" as="script">
+  	<link rel="preload" href="app.js" as="script">
+  	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
+		<link href="style.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+
+		
+		<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" type="image/x-icon">
+		<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png"  type="image/x-icon">
+		<link rel="manifest" href="/site.webmanifest">
+
+		<!-- - - - - - -->
 		
   	
   	<!-- ceci fait ramer alors que ça devrait pas ! -->
