@@ -162,6 +162,7 @@ const isLocalStorageEnabled = () => {
 };
 
 
+/* virer, utiliser structuredClone() en natif */
 const clone= (obj)=> {
 	return JSON.parse(JSON.stringify(obj));
 };
@@ -1145,7 +1146,7 @@ if (isLocalStorageEnabled()) { // si localStorage est supporté :
 	if (window.localStorage.getItem("questions") !== null){
 		questions= JSON.parse(window.localStorage.getItem('questions'));
 	 } else {
-	 	questions=clone(_questions);
+	 	questions=structuredClone(_questions);
 	 	for(let i=0;i<questions.length;i++){
 	 		// on rajoute des propriétés vides aux questions (stats de la question)
 			// dernière vue sera une date quand on aura vu la question
@@ -1157,7 +1158,7 @@ if (isLocalStorageEnabled()) { // si localStorage est supporté :
 	 if (window.localStorage.getItem("themes") !== null){
 		themes= JSON.parse(window.localStorage.getItem('themes'));
 	 } else {
-	 	themes=clone(_themes);
+	 	themes=structuredClone(_themes);
 	 	for(id in themes){
 	 		let nouvellesProp={
 	 			'id':id, //pratique, chaque theme contient son id
@@ -1176,9 +1177,9 @@ if (isLocalStorageEnabled()) { // si localStorage est supporté :
 	 if (window.localStorage.getItem("chapitres") !== null){
 		chapitres= JSON.parse(window.localStorage.getItem('chapitres'));
 		// ATTENTION ?
-		chapitres={...chapitres,...clone(_chapitres)};// on récupère les nouveaux chapitres éventuels ?
+		chapitres={...chapitres,...structuredClone(_chapitres)};// on récupère les nouveaux chapitres éventuels ?
 	 } else {
-	 	chapitres=clone(_chapitres);
+	 	chapitres=structuredClone(_chapitres);
 	 	
 	}
 	
