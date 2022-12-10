@@ -1,0 +1,108 @@
+navigation avec History, en attendant la nouvelle API Navigation ? Ou attendre ?
+
+
+
+ECRAN DES CHAPITRES
+------------------
+
+Dans les boutons des thèmes, mettre la progression : ceci était déjà fait mais a disparu ??
+
+
+DATABASE
+-------
+
+rajouter une question 0, la question vide, comme ça les questions commencent à 1 ?
+Désavantage : on doit tout décaler dans "_themes.js"
+
+
+
+Stats / profil
+--------------
+
+
+- Séries de jours consécutifs ! Afficher ça ou ? Félicitation chaque jour à la première connexion, dès que la série est >=2
+
+>> commencer par coder les variables etc, avant d'implémenter sur l'UI
+
+- Mettre aussi un truc genre "tant de temps depuis votre dernière visite" ? Et éventuellement donner un bonus si ça fait longtemps qu la personne ne se connecte pas.
+
+
+
+
+
+Cadeaux / récompenses
+---------------------
+
+- Fonctionnalités bloquées (affichées mais désactivées, avec cadenas)
+"nouvelles fonctionnalités débloquées à > (prochaine pallier)
+Avantage : inciter à progresser.
+
+Choses à débloquer :
++ possibilité de changer le skin (donc à faire après avoir codé ça)
++ nouveaux cadeaux ?
++ avoir des gels de série qui tombent en cadeaux ? Ca c'est le mal :-)
+
+
+- Pour les cadeaux : système de cadeaux qu'on ne peut ouvrir qu'à un certain moment, comme dans Duolingo ? Objectif  fair revenir l'utilisateur une heure après pour ouvrir son cadeau, sinon celui-ci est perdu ? priorité BASSE
+
+
+UX / animation / transitions
+----------------------------
+
+Affichage ; dans un quiz, on pourrait charger toutes les questions et forcer le scroll (avec effet de smoothing) quand on clique sur valider ? on mettrait les questions en hidden ce qui ferait tt de même tourner mathjax
+
+
+
+FONCTIONNEMENT de l'affichage
+--------------------
+
+
+actuellement à chaque changement d'etat, on recalcule tous les affichages, y compris ceux des etats non visibles... pas optimal. Cela dit les pages sont rendues en 2 à 10 ms, pas très grave.
+
+Pour les messages courts, priilegier des fonctions de type "alert" qui rendent visible un splash screen que l'on peut occulter ensuite ?
+Avantage : pas de rendu mathJax de relancé : car ça, c'est pénible.
+
+
+
+SKINS
+------
+
+système de skin : pouvoir changer la teinte
+noms de variable lum1, lum2, lum3 en ton1 et teinte 1 et teinte 2, et fixed les deux teintes ensuite.
+
+On peut changer les skins quand le mode change, ou ben changer les skins après 100 pts, 1000 pts, 5000 pts etc.
+
+
+Choix à faire : espace colorimétrique : 
+oklch : utiliser le polyfill / colors
+
+changer le nom couleurs primaire/secondaire (échanger, ça serait plus naturel)
+
+
+
+
+- - - - - 
+
+
+MODES débloqués quand on atteint une barre de points : mort subite, mode difficile etc ?
+changement de code couleurs, par exemple plus violet en mode difficile, mode chrono ?
+
+ou mode chrono pour chaque thème ? Ou possibilité de lancer un quiz chrono quand on veut, avec limite de temps et bonus augmentés ? Genre les points comptent double si on finit assez vite ?
+
+
+dans les stats de questions, on pourrait stocker la date de dernière vue ? est-ce déjà fait ?
+
+Système de vies ? de mode difficile (= droit à x erreurs seulement dans les quiz: comme des vies. ET on peut regagner des vies genre une par heure ?
+
+
+
+
+ECRAN INFO THEME:
+-------------------
+
+Autres boutons, en plus de "quest ratées" et "quiz aléatoire" :
+
+lancer quiz (mélangé) sur TOUTES les questions : quiz "Marathon" ?
+
+et aussi sur les questions non réussies ? Ou ratées ? Non car ça augmente la progression du thème trop vite ;-)
+

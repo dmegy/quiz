@@ -1,0 +1,22 @@
+[
+	{"answer": true, "statement": "$(\\sqrt{2}+2)(\\sqrt{2}-1)=\\sqrt{2}$"},
+	{"answer": false, "statement": "$(\\sqrt{2}+2)(\\sqrt{2}+1)=2+3\\sqrt{2}$"},
+	{"answer": true, "statement": "$(\\sqrt{2}+1)(\\sqrt{2}+1)=3+\\sqrt{8}$"},
+	{"answer": false, "statement": "$(\\sqrt{3}-1)(1-\\sqrt{3})=-4-2\\sqrt{3}$"},
+	{"answer": true, "statement": "$\\sqrt{2}(\\sqrt{2}+\\sqrt{3})=2+\\sqrt{6}$"},
+	{"answer": true, "statement": "$\\sqrt{2}(\\sqrt{8}-\\sqrt{2})=2$"},
+	{"answer": true, "statement": "$(\\sqrt{5}+\\sqrt{2})\\sqrt{10}=5\\sqrt{2}+2\\sqrt{5}$"},
+	{"answer": false, "statement": "$(\\sqrt{2}+\\sqrt{3})(\\sqrt{2}-\\sqrt{3})=1$"},
+	{"answer": true, "statement": "$\\sqrt{3}(\\sqrt{12}-\\sqrt{3})=3$"},
+	{"answer": true, "statement": "$(\\sqrt{18}+\\sqrt{8})\\sqrt{2}=10$"},
+	{"answer": false, "statement": "$\\sqrt{2}(\\sqrt{18}-\\sqrt{8})=4$"},
+	{"answer": true, "statement": "$\\sqrt{3+2\\sqrt{2}}=1+\\sqrt{2}$"},
+	{"answer": true, "statement": "$\\sqrt{\\sqrt{4}}=\\sqrt{2}$"},
+	{"answer": false, "statement": "$\\sqrt{\\sqrt{64}}=4$"},
+	{"answer": false, "statement": "$\\sqrt{\\sqrt{8}}=2$"},
+	{"answer": false, "statement": "$\\sqrt{\\sqrt{128}}=4$"},
+	{"answer": false, "statement": "$\\sqrt{6+2\\sqrt{2}}=2+2\\sqrt{2}$"},
+	{"answer": true, "statement": "$\\sqrt{4+2\\sqrt{3}}=1+\\sqrt{3}$"},
+	{"answer": false, "statement": "$\\sqrt{3}(\\sqrt{6}+\\sqrt{8})=3\\sqrt{2}+2\\sqrt{3}$"},
+    {"answer": true, "statement": "$(\\sqrt{3}+1)(3+\\sqrt{3})=6+4\\sqrt{3}$"}
+]
