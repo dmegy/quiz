@@ -980,7 +980,8 @@ function goto(e,mathjax=true){
 	}
 	actualiserAffichage();
 
-	if(mathjax){// ceci permet de faire goto sans réactualiser mathjax si on en veut pas, par exemple au démarrage
+	if(mathjax){
+		// ceci permet de faire goto sans réactualiser mathjax si on en veut pas, par exemple au démarrage
 		actualiserMathJax();
 	}
 }
@@ -1026,7 +1027,8 @@ function actualiserMathJax(){
 	}
 }
 
-function actualiserBarres(a,b,c){ // entrées : valeurs entre 0 et 100, somme <100 si possible...
+function actualiserBarres(a,b,c){
+	// entrées : valeurs entre 0 et 100, somme <100 si possible...
 	// actualisation des longueurs des barres de progression
 	document.getElementById("progress-rouge").style.width=a+"%";
 	document.getElementById("progress-jaune").style.width=b+"%";

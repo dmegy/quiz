@@ -42,7 +42,7 @@
   			display:inline-block;
   			font-size: 1.5rem;
   			letter-spacing: -.03em;
-  			text-shadow: 0 0 2px var(--c-texte);
+  			/*text-shadow: 0 0 2px var(--c-texte);*/
   			transform:scaleX(1.1);
   			margin: .1rem 1rem;
   		}
@@ -386,7 +386,7 @@
 
 
 		<script type="text/javascript">
-			//- - - - - - - W O R K E R  - - - - - -
+			//- - - -   I N L I N E D   W O R K E R  !!  - - - - - -
 			var workerSource=`
 			  onmessage = (evt) => {
 			    const base = evt.data;
@@ -934,9 +934,7 @@
 
 
 	<!-- Mathjax config -->
-	<script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
-	</script>
+	
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
 			tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
