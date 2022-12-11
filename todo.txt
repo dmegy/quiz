@@ -1,3 +1,20 @@
+Vu qu'au début, les thèmes ne sont pas arrivés, et qu'on ne peut donc pas cliquer sur les icones, et donc qu'on n'affiche pas les icones avant le domcontentloaded, il faut virer les svg de l'index, ça sera affiché avec javascript et actualiserAffichage()
+
+Il faut aussi voir si on a besoin des questions au début : on n'a besoin que des chapitres et thèmes, pas des questions, enfin pas tout de suite. On pourrait charger les questions en async et pas en defer.
+
+Il faut aussi vérifier ce que fait app.js en s'executant, et s'il n'y a pas besoin d'avoir les questions (pour y rajouter les stats trouvées dans le storage, par exemple)
+
+Le storage, on en a besoin pour afficher les points lors de actualiserAffichage()
+
+
+Mais on a juste besoin des points, pas de tout... donc séparer la recherche des points du reste.
+
+
+
+On a besoin des thèmes et chapitres, et lorsqu'on va les afficher, il faut avoir les points gagnés sur les thèmes et chapitres, et calculer les stats de chaque thème pour afficher la progression du thème : mais ceci pourrait être fait grace au storage, au début ?
+
+
+
 navigation avec History, en attendant la nouvelle API Navigation ? Ou attendre ?
 
 

@@ -420,7 +420,12 @@ function afficherThemes(){
 	// NE PAS METTRE DE LATEX DANS LES ETIQUETTES ! PREFERER UNICODE.
 
 
-	goto('afficherThemes');
+	// préchargement de MathJax : 
+	document.getElementById('themes').insertAdjacentHTML("beforeend",'<span id="formuleSecrete" style="visibility:hidden">Test MathJax: $\\int_{\\mathbb R} e^{-x^2} dx = \\sqrt\\pi$.<br></span>');
+	actualiserMathJax();
+
+
+	goto('themes');
 }
 
 
@@ -947,7 +952,7 @@ function goto(e,mathjax=true){
 
 	window.clearTimeout(timeoutQuiz);
 
-	if(etat=="afficherThemes"){
+	if(etat=="themes"){
 		// enregistrer le scoll actuel
 	}
 	etatPrecedent=etat; // au cas où
@@ -956,14 +961,14 @@ function goto(e,mathjax=true){
 	// aide visuelle en haut pour savoir où on est
 	// refaire, pas assez visible
 
-	if(e=="accueil" || e=="afficherThemes" || e=="user" || e=="trophees"){
+	if(e=="accueil" || e=="themes" || e=="user" || e=="trophees"){
 		document.querySelectorAll(".menu").forEach((el)=>{el.classList.remove('svg-superstrong-glow');});
 		document.getElementById("menu-"+e).classList.add("svg-superstrong-glow");
 	}
 
 	// activation/désactivation du scroll :
 
-	if(e=='afficherThemes' || e=='trophees'||e=='info'){
+	if(e=='themes' || e=='trophees'||e=='info'){
 		// scroller à l'ancien scroll ?
 		window.scrollTo(0,0); 
 		scroll();
@@ -974,7 +979,7 @@ function goto(e,mathjax=true){
 	}
 	actualiserAffichage();
 
-	if(mathjax){//?
+	if(mathjax){// ceci permet de faire goto sans réactualiser mathjax si on en veut pas, par exemple au démarrage
 		actualiserMathJax();
 	}
 }
@@ -1246,21 +1251,12 @@ if(user.avatar!=""){
 }
 
 
-// --- MATHJAX : test invisible d'une formule
-//  on ajoute à "#accueil" un span hidden avec une formule dedans
-document.addEventListener("load", ()=>{
-	document.getElementById('accueil').insertAdjacentHTML("beforeend",'<span id="formuleSecrete" style="visibility:hidden">Test MathJax: $\\int_{\\mathbb R} e^{-x^2} dx = \\sqrt\\pi$.<br></span>');
-	actualiserMathJax();
-});
 
 
-goto("accueil",false);// ceci réactualise, pour afficher les points, l'icône personnalisée etc
-/* console.log("On lance le chargement de MathJax à t="+temps());
-getScript("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML",()=>{
-	//MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-	console.log("MathJax chargé à t="+temps());
-});
-*/
+
+
+goto("accueil",false);
+// ceci réactualise, pour afficher les points, l'icône personnalisée etc, mais sans mathjax, donc sans lancer le chargement du script
 
 
 
@@ -1280,6 +1276,15 @@ const setFont = (f)=>{
 	document.body.style.fontFamily=f;
 }
 
+
+
+window.onload=function(){
+	// on lance mathjax, mais sans rien à mettre en forme, juste pour les premiers fichiers.
+	//Une formule invisible sera ajoutée dans la page "thèmes" pour précharger un peu les choses, mais pas à la page de démarrage
+	getScript("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML",()=>{
+	//MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+});
+}
 
 
 /* - - - -- -  TODO
