@@ -18,6 +18,7 @@
 
 
 
+
 let timeoutQuiz; // gestion timer du lancement automatique des quiz
 
 const probaCadeau=0.2; // proba d'avoir un cadeau (petit, en points)
@@ -1123,6 +1124,16 @@ function ajouter(total){
 
 
 
+
+
+
+
+
+
+
+
+
+
 /* Ceci était auparavant dans un event DOMContentLoaded, mais c'est maintenant inutile.
 Comme tous les scripts sont en defer, aucun risque, les questions et chapitres sont déjà arrivés.
 Il est déjà arrivé que MathJax prenne plus de 10 secondes à loader : 
@@ -1131,140 +1142,145 @@ dans ce cas, le window.onload n'arrive pas, mais ça ne bloque pas l'application
 // on prend les choses dans le localstorage et on réinitialise ce qui doit l'être
 // on est dnas le onload donc tous les scripts etc sont chargés.
 
-if (isLocalStorageEnabled()) { // si localStorage est supporté :
-	if (window.localStorage.getItem("premiereConnexion") !== null) 
-		messageAccueil="Te revoilà !";
-	else
-		window.localStorage.setItem("premiereConnexion",JSON.stringify(new Date()));
+function demarrage(){
 
-	console.log("local storage supporté");
-	if (window.localStorage.getItem("points") !== null) 
-	  points=parseInt(window.localStorage.getItem('points'),10);
 
-	if (window.localStorage.getItem("historique") !== null) 
-	  historique= JSON.parse(window.localStorage.getItem('historique'));
+	if (isLocalStorageEnabled()) { // si localStorage est supporté :
+		if (window.localStorage.getItem("premiereConnexion") !== null) 
+			messageAccueil="Te revoilà !";
+		else
+			window.localStorage.setItem("premiereConnexion",JSON.stringify(new Date()));
 
-	if (window.localStorage.getItem("user") !== null) 
-	  user= {...user,...JSON.parse(window.localStorage.getItem('user'))};
+		console.log("local storage supporté");
+		if (window.localStorage.getItem("points") !== null) 
+		  points=parseInt(window.localStorage.getItem('points'),10);
 
-	if (window.localStorage.getItem("questions") !== null){
-		questions= JSON.parse(window.localStorage.getItem('questions'));
-	 } else {
-	 	questions=structuredClone(_questions);
-	 	for(let i=0;i<questions.length;i++){
-	 		// on rajoute des propriétés vides aux questions (stats de la question)
-			// dernière vue sera une date quand on aura vu la question
-			let nouvellesProp={'derniereVue':0,'points':0,'nbVues':0,'scoreMoyen':0,'scoreRecent':0,'dernierScore':0,'resultat':0};
-			questions[i]={...questions[i],...nouvellesProp};
+		if (window.localStorage.getItem("historique") !== null) 
+		  historique= JSON.parse(window.localStorage.getItem('historique'));
+
+		if (window.localStorage.getItem("user") !== null) 
+		  user= {...user,...JSON.parse(window.localStorage.getItem('user'))};
+
+		if (window.localStorage.getItem("questions") !== null){
+			questions= JSON.parse(window.localStorage.getItem('questions'));
+		 } else {
+		 	questions=structuredClone(_questions);
+		 	for(let i=0;i<questions.length;i++){
+		 		// on rajoute des propriétés vides aux questions (stats de la question)
+				// dernière vue sera une date quand on aura vu la question
+				let nouvellesProp={'derniereVue':0,'points':0,'nbVues':0,'scoreMoyen':0,'scoreRecent':0,'dernierScore':0,'resultat':0};
+				questions[i]={...questions[i],...nouvellesProp};
+			}
+		 }
+
+		 if (window.localStorage.getItem("themes") !== null){
+			themes= JSON.parse(window.localStorage.getItem('themes'));
+		 } else {
+		 	themes=structuredClone(_themes);
+		 	for(id in themes){
+		 		let nouvellesProp={
+		 			'id':id, //pratique, chaque theme contient son id
+					'nbQuestions':themes[id].questions.length, // pratique aussi
+					'nbQuestionsVues':0,
+					'nbQuestionsReussies':0,
+					'nbQuestionsConsolidees':0,
+					'progression':0,
+					'progressionConsolidee':0,
+					'points':0 		//pts gagnés sur ce thème, update en fin de quiz
+				};
+				themes[id]={...themes[id],...nouvellesProp}; // on rajoute les nouvelles propriétés
+			}
 		}
-	 }
 
-	 if (window.localStorage.getItem("themes") !== null){
-		themes= JSON.parse(window.localStorage.getItem('themes'));
-	 } else {
-	 	themes=structuredClone(_themes);
-	 	for(id in themes){
-	 		let nouvellesProp={
-	 			'id':id, //pratique, chaque theme contient son id
-				'nbQuestions':themes[id].questions.length, // pratique aussi
-				'nbQuestionsVues':0,
-				'nbQuestionsReussies':0,
-				'nbQuestionsConsolidees':0,
-				'progression':0,
-				'progressionConsolidee':0,
-				'points':0 		//pts gagnés sur ce thème, update en fin de quiz
-			};
-			themes[id]={...themes[id],...nouvellesProp}; // on rajoute les nouvelles propriétés
+		 if (window.localStorage.getItem("chapitres") !== null){
+			chapitres= JSON.parse(window.localStorage.getItem('chapitres'));
+			// ATTENTION ?
+			chapitres={...chapitres,...structuredClone(_chapitres)};// on récupère les nouveaux chapitres éventuels ?
+		 } else {
+		 	chapitres=structuredClone(_chapitres);
+		 	
 		}
+		
+
+	} else{
+		console.log("localStorage n'est pas supporté");
 	}
 
-	 if (window.localStorage.getItem("chapitres") !== null){
-		chapitres= JSON.parse(window.localStorage.getItem('chapitres'));
-		// ATTENTION ?
-		chapitres={...chapitres,...structuredClone(_chapitres)};// on récupère les nouveaux chapitres éventuels ?
-	 } else {
-	 	chapitres=structuredClone(_chapitres);
-	 	
+	for(id in chapitres){
+			chapitres[id].points= chapitres[id].points || 0;
 	}
-	
 
-} else{
-	console.log("localStorage n'est pas supporté");
+
+
+	user={...user,...activiteRecente()}; 
+	// on remet l'activité récente une fois l'historique chargé à partir du localstorage
+	// (par sécurité, pour anciennes versions de l'app)
+
+
+
+
+
+	// le input pour l'upload de photos de profil
+	const uploadFile=document.getElementById("inputTag");
+	uploadFile.addEventListener('change', async (evt) => {
+		let taille=96; // taille de l'image carrée, après recadrage et redimmension
+		let file = evt.currentTarget.files[0];
+		if(!file) return;
+
+		let b64str = await readFileAsDataURL(file);
+
+		let _IMG = await loadImage(b64str);
+
+		const inputWidth = _IMG.naturalWidth;
+	  const inputHeight = _IMG.naturalHeight;
+	  const petitCote = Math.min(inputWidth,inputHeight);
+	  const debutX=(inputWidth-petitCote)/2;
+	  const debutY=(inputHeight-petitCote)/2;
+		let canvas = document.createElement("canvas");
+		canvas.width = taille;
+		canvas.height = taille;
+		let ctx = canvas.getContext("2d");
+		ctx.drawImage(_IMG, debutX,debutY,petitCote,petitCote,0,0,taille,taille);
+		let avatarImg = document.getElementById('avatarImg');
+		// compression puis création de la dataURL
+		let avatarURL=canvas.toDataURL("image/jpeg", 0.8);
+		// on affiche l'image :
+		avatarImg.src=avatarURL;
+		// on enlève le cercle en pointillés puis on affiche l'image
+		document.getElementById("avatarDisque").classList.remove('avatar-manquant');
+		document.getElementById("avantAvatar").style.display="none";// l'icone d'image manquante
+		avatarImg.style.display="block";
+		// on sauvegarde l'image dans le storage :
+		user.avatar=avatarURL;
+		sauvegarder();
+	}, false);
+
+	// s'il y a une image d'avatar dans le storage, on l'affiche
+	if(user.avatar!=""){
+		document.getElementById("avantAvatar").style.display="none";
+		let avatarImg = document.getElementById("avatarImg");
+		avatarImg.src=user.avatar;
+		document.getElementById("avatarDisque").classList.remove("avatar-manquant");
+		avatarImg.style.display="block";
+	}
+
+
+
+
+
+
+	goto("accueil",false);
+	// ceci réactualise, pour afficher les points, l'icône personnalisée etc, mais sans mathjax, donc sans lancer le chargement du script
+
+	// fin de la fonction de démarrage
 }
-
-for(id in chapitres){
-		chapitres[id].points= chapitres[id].points || 0;
-}
-
-
-
-user={...user,...activiteRecente()}; 
-// on remet l'activité récente une fois l'historique chargé à partir du localstorage
-// (par sécurité, pour anciennes versions de l'app)
-
-
-
-
-
-// le input pour l'upload de photos de profil
-const uploadFile=document.getElementById("inputTag");
-uploadFile.addEventListener('change', async (evt) => {
-	let taille=96; // taille de l'image carrée, après recadrage et redimmension
-	let file = evt.currentTarget.files[0];
-	if(!file) return;
-
-	let b64str = await readFileAsDataURL(file);
-
-	let _IMG = await loadImage(b64str);
-
-	const inputWidth = _IMG.naturalWidth;
-  const inputHeight = _IMG.naturalHeight;
-  const petitCote = Math.min(inputWidth,inputHeight);
-  const debutX=(inputWidth-petitCote)/2;
-  const debutY=(inputHeight-petitCote)/2;
-	let canvas = document.createElement("canvas");
-	canvas.width = taille;
-	canvas.height = taille;
-	let ctx = canvas.getContext("2d");
-	ctx.drawImage(_IMG, debutX,debutY,petitCote,petitCote,0,0,taille,taille);
-	let avatarImg = document.getElementById('avatarImg');
-	// compression puis création de la dataURL
-	let avatarURL=canvas.toDataURL("image/jpeg", 0.8);
-	// on affiche l'image :
-	avatarImg.src=avatarURL;
-	// on enlève le cercle en pointillés puis on affiche l'image
-	document.getElementById("avatarDisque").classList.remove('avatar-manquant');
-	document.getElementById("avantAvatar").style.display="none";// l'icone d'image manquante
-	avatarImg.style.display="block";
-	// on sauvegarde l'image dans le storage :
-	user.avatar=avatarURL;
-	sauvegarder();
-}, false);
-
-// s'il y a une image d'avatar dans le storage, on l'affiche
-if(user.avatar!=""){
-	document.getElementById("avantAvatar").style.display="none";
-	let avatarImg = document.getElementById("avatarImg");
-	avatarImg.src=user.avatar;
-	document.getElementById("avatarDisque").classList.remove("avatar-manquant");
-	avatarImg.style.display="block";
-}
-
-
-
-
-
-
-goto("accueil",false);
-// ceci réactualise, pour afficher les points, l'icône personnalisée etc, mais sans mathjax, donc sans lancer le chargement du script
-
-
-
 
 
 
 
 // ceci s'execute quand le DOM est prêt car le scrit est en defer
+// ceci permet de changer la fonte dans l'url, pour comparer
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 if(urlParams.has('font')){
@@ -1285,6 +1301,9 @@ window.onload=function(){
 	//MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 });
 }
+
+
+
 
 
 /* - - - -- -  TODO

@@ -1,3 +1,13 @@
+function js2css(variables){
+	let root = document.querySelector(':root');
+	
+	/* ici on peut mettre autre chose, ou le passer en paramètre ?*/
+	for (v  of variables){
+		root.style.setProperty("--js-"+v.replace(/\./g,'-'),eval(v));
+	}
+}
+
+
 
 function getScript(scriptUrl, callback) {
     const script = document.createElement('script');

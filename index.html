@@ -24,6 +24,7 @@
 
   		/*  - - - - - S T Y L E S   C R T I Q U E S - - - - - - -*/
 
+
   		h2faux {
   			display:inline-block;
   			font-size: 2.6rem;
@@ -344,7 +345,7 @@
 
   	<!-- - - - le temps que les polices arrivent, on lance les connexions - - -->
 
-		<link rel="preload" href="questions.js" as="script">
+		<!-- plus besoin, c'est le worker qui charge ça<link rel="preload" href="questions.js" as="script">-->
   	<link rel="preload" href="themes.js" as="script">
   	<link rel="preload" href="fonctions.js" as="script">
   	<link rel="preload" href="composants.js" as="script">
@@ -380,7 +381,35 @@
 			}
 
 		</style>
-		
+
+
+
+
+		<script type="text/javascript">
+			//- - - - - - - W O R K E R  - - - - - -
+			var workerSource=`
+			  onmessage = (evt) => {
+			    const base = evt.data;
+			    const absolute = new URL( "questions.json", base );
+			    fetch( absolute )
+			      .then( (resp) => resp.json() )
+			      .then( (txt) => postMessage( txt ) )
+			      .catch( console.error );
+			  };
+			`;
+			var workerBlob=new Blob([workerSource]);
+			var workerURL = URL.createObjectURL(workerBlob);
+			var Hermann = new Worker(workerURL);
+			Hermann.postMessage( document.baseURI );
+			Hermann.onmessage = function(e) {
+				_questions=e.data;
+				console.log("liste des questions reçue ! Il y en a "+_questions.length);
+
+				URL.revokeObjectURL(workerURL); // là on est sûr que c'est ok.
+				Hermann.terminate(); // ou pas ?
+				demarrage(); 
+			}
+		</script>
 		
 		<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" type="image/x-icon">
 		<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png"  type="image/x-icon">
@@ -392,9 +421,9 @@
 		<!--<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2020"></script>-->
 		<script type="text/javascript" defer src="fonctions.js"></script>
 		<script type="text/javascript" defer src="composants.js"></script>
-		<script type="text/javascript" defer src="questions.js"></script>
 		<script type="text/javascript" defer src="themes.js"></script>
 		<script type="text/javascript" defer src="app.js"></script>
+		
   </head>
 
 
@@ -425,7 +454,7 @@
 		
   	<!-- Le compteur global de points, masqué au début-->
   	<div style="display:none" class="sync margin-l-r" data-action="toggle" data-param="(etat=='accueil')||(etat=='themes')||(etat=='info')||(etat=='user')||(etat=='trophees')">
-  		<div class="sync" data-action="html" data-param="htmlPoints()">0 pt</div>
+  		<div class="sync" data-action="html" data-param="htmlPoints()">0 pts</div>
 		</div>
 
 		
@@ -915,6 +944,6 @@
 	</script>
 
 	
-	
+
   </body>
 </html>
