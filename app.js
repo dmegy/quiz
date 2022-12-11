@@ -1296,17 +1296,6 @@ const setFont = (f)=>{
 
 
 
-window.onload=function(){
-	// on lance mathjax, mais sans rien à mettre en forme, juste pour les premiers fichiers.
-	//Une formule invisible sera ajoutée dans la page "thèmes" pour précharger un peu les choses, mais pas à la page de démarrage
-	getScript("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML",()=>{
-	//MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-});
-}
-
-
-
-
 
 /* - - - -- -  TODO
 
