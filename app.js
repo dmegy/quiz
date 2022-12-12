@@ -804,6 +804,7 @@ window.addEventListener('load',()=>{
 			  font-family: "Nunito";
 			  font-weight: 900 ;
 			  font-style: normal;
+			  font-display: swap;
 			  src: url("assets/nunito-v16-latin-900.woff2");
 			 }
 			</style>`);
