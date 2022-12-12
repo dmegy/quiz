@@ -1034,7 +1034,4 @@ function htmlPoints(){
 
 
 
-
-
-console.log("app.js tente le démarrage")
 demarrage();
