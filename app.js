@@ -582,7 +582,7 @@ dans ce cas, le window.onload n'arrive pas, mais ça ne bloque pas l'application
 // on est dnas le onload donc tous les scripts etc sont chargés.
 
 function demarrage(){
-
+	console.log("Demarrage")
 
 	if (isLocalStorageEnabled()) { // si localStorage est supporté :
 		if (window.localStorage.getItem("premiereConnexion") !== null) 
@@ -972,3 +972,9 @@ function htmlPoints(){
 	return s;
 }
 
+
+
+
+
+console.log("app.js tente le démarrage")
+tenterDemarrage();
