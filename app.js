@@ -188,23 +188,6 @@ function sauvegarder(){
 
 
 
-// - - - - - - - - -
-// STATS NON LOCALES
-
-// faire ceci au onload ?
-
-//fetch('http://damienmegy.xyz/php/vf/vf_compteur.php'); 
-// attention, faire un truc avec sessionStorage pour ne pas renvoyer le compteur à chaque refresh
-
-/*
-fetch('http://damienmegy.xyz/php/vf/vf_record.txt?stamp='+ (new Date()).getTime())
-  		.then(response => response.text())
-  		.then((data) => {
-			record=data;
-			document.getElementById("record").innerHTML=record; // au lieu de tout réactualiser
-	  })
-	  
-*/
 
 
 
@@ -358,6 +341,8 @@ function activiteRecente(){
 
 }
 
+
+// on devrait toujours laisser scroller et voilà, non ? Du moment qu'on masque la barre de défilement ?
 function noScroll(){
 	document.getElementsByTagName('body')[0].style.overflow='hidden';
 }
@@ -433,6 +418,7 @@ function afficherThemes(){
 
 
 function calculerStatsTheme(id){
+	// entrée : un *id* de thème, et non le thème lui-même !
 	// actualisation des stats du theme
 	// fonction lancée lors de l'affichage de la liste des thèmes
 	// et non pas seulement lors de la complétion d'un quiz 
@@ -463,7 +449,7 @@ function afficherInfoTheme(id){ // lorsqu'on clique sur un thème :
 	console.log("afficherInfoTheme de "+id);
 	calculerStatsTheme(id);
 	let t=themes[id];// pointeur
-	theme = JSON.parse(JSON.stringify(t)); // theme courant : on pourrait remplacer par juste l'id courant
+	theme = structuredClone(t); // theme courant : on pourrait remplacer par juste l'id courant
 	//theme.id=id; // déjà fait au démarrage
 	
 	// barres de progression circulaires:
@@ -493,471 +479,16 @@ function afficherInfoTheme(id){ // lorsqu'on clique sur un thème :
 
 
 
-let demarrerQuiz = function(seuil=1){// seuil est le seuil pour selectionner les questions
-	// par rapport au dernier score : <=-1 pour les questions ratées au dernier essai,
-	// ou bien <=0 pour ratées ou sautées
-	// valeur 1 par défaut, c'est-à-dire ttes les questions
-
-	// démarrer un quiz aléatoire sur le thème préselectionné (variable globale "theme")
-
-	// on duplique mais attention, transforme les dates en chaînes :
-	quiz = JSON.parse(JSON.stringify(theme)); 
-
-
-	// on ne garde que les questions dont le dernier score est <= seuil :
-	quiz.questions = quiz.questions.filter( n => questions[n].dernierScore<=seuil);
-
-
-	shuffleArray(quiz.questions); // on permute les questions
-	// on vide la fin pour ne garder au plus que 'longueurQuiz' questions
-	while(quiz.questions.length>longueurQuiz)
-		quiz.questions.shift();
-
-
-
-	// réinitialisation des variables globales du quiz (et non du thème)
-	// qui seront ensuite utilisées pour la note de fin du quiz
-	let nouvellesProps={
-		"longueur":quiz.questions.length,
-		"repNeutres":0,
-		"repJustes":0,
-		"repFausses":0,
-		"points":0,
-		"bonus":0,
-		"total":0,
-		"debut": new Date()
-	};
-	quiz = {...quiz,...nouvellesProps}; // les nouvelles props écrasent éventuellt les anciennes
-
-	actualiserBarres(0,0,0);// remet les bares de progression du thème à zéro
-
-
-	// CONSTRUCTION DU QUIZ
-
-	document.querySelector(".zone-quiz").innerHTML=""; //on vide
-
-	for(let j=0; j<quiz.longueur; j++){
-		document.querySelector(".zone-quiz").insertAdjacentHTML("beforeend",htmlQuestion(quiz.questions[j]));
-	}
-
-	prochaineQuestion();
-}
-
-
-
-function prochaineQuestion(){
-	// mettre cette variable en local et ne plus l'appeler ? utiliser seulemet question.num ?
-	numQuestion=quiz.questions.splice(0,1)[0];//on enlève le premier numéro de la liste
-	//duplication de la question:
-	question=JSON.parse(JSON.stringify(questions[numQuestion])); // duplication
-	// (on duplique car on va peut-être rajouter des choses à la question, genre les réponses données, le temps, le résultat etc)
-	// ou pas ?
-
-	question.debut=new Date();
-	question.num=numQuestion;
-
-	document.querySelectorAll(".zone-quiz > div").forEach((el)=>{el.style.display="none";});
-	document.getElementById(`question-${numQuestion}`).style.display="";
-
-
-	sauvegarder(); // ?? pour quoi faire ? sauvegarde des points précédents p-e ?
-	goto("jeu");
-
-}
-
-
-
-// !! ATTENTION pas d'utilisation de fonction d'état pour ne pas recalculer le mathjax si on revient au quiz :
-function demanderFermeture(){
-	document.getElementById("vraimentquitter").style.display="block";
-}
-function quitterQuiz(){
-	document.getElementById("vraimentquitter").style.display="none";
-	afficherThemes();
-}
-
-
-
-function corrigerQuestion(){
-	question.fin=new Date();
-	question.temps=question.fin - question.debut;
-
-	// calcul de 'question.resultat', qui vaut -1, 0 ou 1, en lisant la réponse donnée
-
-	question.resultat=0;// le résultat à l auqestion, par défaut 0 si blanc ou abstention
-	question.reponseDonnee=-1;
-
-	for(let i=0;i<question.reponses.length;i++){
-		
-		if( document.getElementById(`question-${question.num}-choix-${i}`).matches(':checked')){
-			question.reponseDonnee=i;
-		}
-		if( question.reponses[i].correct){
-			question.bonneReponse=i;
-		}
-	}
-	if(question.reponseDonnee>=0){
-		question.resultat=(question.bonneReponse==question.reponseDonnee) ? 1 : -1;
-	} else{
-		// pas de réponse donnée, ou "je sais pas"
-		document.getElementById(`question-${question.num}-choix--1`).click();
-	}
-	
-	historique.questionsVues.unshift(question); // on met dans l'historique
-
-
-	// actualiser les stats de la question en cours : nb de fois qu'elle est tombée, temps etc
-	actualiserStatsQuestion();
-	let incr=triplet(question.resultat);
-
-
-	// barre de combo et record de combo
-	if (question.resultat==1){
-		user.combo++; // combo globale
-		if(user.combo>user.comboRecord){// record de combo du joueur
-			user.comboRecord=user.combo;
-		}
-	}
-	else {
-		user.combo=0;
-	}
-
-	// on update repFausses, Neutres et Justes sur le quiz (pour la note & stats), le thème, et l'utilisateur
-	[quiz.repFausses,quiz.repNeutres,quiz.repJustes] = sommeTab([quiz.repFausses,quiz.repNeutres,quiz.repJustes],incr);
-	[user.repFausses,user.repNeutres,user.repJustes] = sommeTab([user.repFausses,user.repNeutres,user.repJustes],incr);
-	[theme.repFausses,theme.repNeutres,theme.repJustes] = sommeTab([theme.repFausses,theme.repNeutres,theme.repJustes],incr);
-
-
-	quiz.points+= question.resultat;// points, c'est juste les points gagnés à la régulière
-	quiz.bonus+=Math.max(user.combo-1,0); // bonus de combo, décalé de un et max pour éviter d'enlever un pt si la question est passée
-
-	quiz.total=quiz.points+quiz.bonus; // pour l'affichage en haut à droite
-
-
-	// TROPHEES qui doivent être octoyés *tt de suite*: 
-
-	// trophée ttes les 100 questions justes (si on vient de réussir)
-	if((user.repJustes/100) % 1 === 0 && question.resultat==1){ // passage de seuil linéaire tts les 100 questions
-		let trophee={
-			"date": new Date(),
-			"icone":"FasMedal",
-			"titre":`${user.repJustes} réussites!`,
-			"texte":`Tu as réussi plus de ${user.repJustes} questions.`
-		};
-		user.trophees.push(trophee);
-		messages.push(trophee);// message affiché à la fin du quiz, ça ne presse pas
-		// par contre on ajoute le trophee maintenant car le quizz peut encore faire un game over
-	}
-	// trophée toutes les 10 combos
-	if((user.combo/10) % 1 === 0 && user.combo>0){ 
-		let trophee={
-			"date": new Date(),
-			"icone":"FasRocket",
-			"titre":`${user.combo} d'affilée !`,
-			"texte":`Cette série t'a fait gagner ${user.combo*(user.combo+1)/2} pts.`
-		};
-		user.trophees.push(trophee);
-		afficherMessage(trophee);// message affiché tt de suite, car la combo peut être cassée
-	}
-
-
-	// changer ceci : soit barre monochrome de progression, soit correspondance entre couleur et question
-	actualiserBarres(100*quiz.repFausses/quiz.longueur,100*quiz.repNeutres/quiz.longueur,100*quiz.repJustes/quiz.longueur); 
-	// les barres sont toujours actualisées, l'affichage de la correction on verra
-
-
-	sauvegarder();
-
-	// - - - - - - - -
-	// COLORIAGE des réponses, désactivation des boutons 
-
-	// on masque la question :
-	document.getElementById(`question-${numQuestion}`).style.display="none";
-	// on désactive tout : 
-	for(let i=-1;i<question.reponses.length;i++){
-		document.getElementById(`question-${question.num}-choix-${i}`).disabled=true;
-		document.getElementById(`label-question-${question.num}-choix-${i}`).style.cursor='not-allowed';
-		document.getElementById(`bouton-question-${question.num}-choix-${i}`).style.cursor='not-allowed';
-	
-	}
-	
-	// on remet en forme pour la correction : fond et border-radius
-	document.getElementById(`question-${numQuestion}`).classList.add("question-corrigee");
-	document.getElementById(`label-question-${numQuestion}-choix--1`).remove();// on enlève le choix "je ne sais pas", il est inutile dans la correct°
-
-	let commentaire="";
-	if(question.resultat==-1){
-		document.getElementById(`question-${numQuestion}`).classList.add(`question-corrigee-danger`);
-		commentaire="Question ratée";
-	}
-	if(question.resultat==0){
-		document.getElementById(`question-${numQuestion}`).classList.add(`question-corrigee-warning`);
-		commentaire="Question sautée";
-	}
-	if(question.resultat==1){
-		document.getElementById(`question-${numQuestion}`).classList.add(`question-corrigee-success`);
-		commentaire="Question réussie";
-	}
-
-	let enTete =`<div class="margin-l-r" style="display:flex;justify-content:space-between">
-								<div>${htmlIconeResultat(question.resultat)} ${commentaire}</div>
-								<div>Q${numQuestion}</div>
-							</div>`;
-
-	document.getElementById(`question-${numQuestion}`).insertAdjacentHTML('afterbegin',enTete);
-	
-
-
-	// la suite : question suivante ou fin, s'il n'y a plus de question, ou game over
-	suite();
-}
-
-function suite(){
-	// si game over, écran game over
-	if(quiz.points+quiz.questions.length<quiz.longueur/4){
-		// on ne peut plus avoir 5/20 au quiz :
-		goto("gameover");
-		// timer pour relancer le quiz :
-		timeoutQuiz = window.setTimeout(demarrerQuiz,15000);
-	}
-	else if(quiz.questions.length!=0){
-		prochaineQuestion();
-	}
-	else {
-		fin();
-		//fin();
-	}
-}
-
-
-
-function fin(){ // Calcul des bonus de fin et affichage des stats de fin :
-	quiz.fin=new Date();
-	quiz.temps=Math.floor((quiz.fin - quiz.debut)/1000); // en secondes
-
-	// note, qui ne prend pas en compte les bonus : 
-	quiz.note=Math.max(Math.ceil(20*quiz.points/quiz.longueur),0);
-	if(quiz.note==20) user.perfects+=1;
-
-	// total après aplication du booster :
-	quiz.total=getBooster(new Date())*( quiz.points+quiz.bonus );
-	historique.quizFinis.unshift(quiz);
-
-	// le quiz a été ajouté à l'historique
-	
-	// seuils de quiz finis, de perfects etc
-	octroyerRecompenses();
-
-	// avant d'ajouter les points aux stats (ceci modifie quiz.total)
-	// mais après avoir calculé mutiplié par le booster :
-	octroyerCadeau();
-
-
-	 
-	// avant d'ajouter, car ajouter utilise l'historique  pour l'activité récente
-	ajouter(quiz.total);//permet de déclencher des actions/affichages, des trophées etc
-	themes[quiz.id].points+=quiz.total; // pts gagnés sur ce thème, pour les stats du thème
-	
-	
-	envoyerStatsServeur(); // ici suivant ce que répond le serveur (?) il faudrait rajouter des messages, genre record battu etc
-	
-	sauvegarder(); // on met tout dans le localStorage
-
-
-	//document.getElementById("correction").innerHTML=document.querySelector(".zone-quiz").innerHTML;
-	// on bouge les questions dans "#correction"
-	let source = document.querySelector(".zone-quiz");
-	let but = document.getElementById("correction");
-	but.replaceChildren();// on vide le debrief, sinon ça s'accumule. 
-	but.append(...source.children);
-	// on affiche :
-	document.querySelectorAll("#correction > div").forEach((el)=>{el.style.display="";});
-	// on devrait colorier, ou alors à la correction
-
-
-	goto("fin"); // chgt d'état et affichage
-	octroyerBooster();// après avoir ajouté les points
-	// maintenant, lorsque l'utilisateur appuie sur les boutons,
-	// ça lance depiler('info') ou depiler('themes') qui depilera les messages en attente
-}
-
-function octroyerRecompenses(){
-	// trophée de seuil tous les 10 perfects :
-	//attention, user.perfects doit déjà être updaté
-	if(quiz.note==20 && user.perfects>0 &&  Math.floor((user.perfects-1)/10) < Math.floor(user.perfects/10)){
-		//on passe un multiple de 10, et on exclut le cas =0
-		let trophee={
-			"date": new Date(),
-			"icone":"FasTrophy",
-			"titre":`${user.perfects} scores parfaits`,
-			"texte":`C'est la ${user.perfects}ème fois que tu termines un quiz avec la note de 20/20 !`
-		};
-		user.trophees.push(trophee);
-		messages.push(trophee);
-	}
-	// tous les 30 quiz finis : 
-	if((historique.quizFinis.length/30)%1 === 0 && historique.quizFinis.length>0){ // tous les 30 quiz finis
-		let trophee={
-			"date" : new Date(),
-			"icone":"FasDumbbell",
-			"titre":`${historique.quizFinis.length}ème quiz`,
-			"texte":`C'est ton ${historique.quizFinis.length}ème quiz validé ! Continue comme ça`
-		};
-		user.trophees.push(trophee);
-		messages.push(trophee);
-	}
-
-}
-
-function octroyerCadeau(){
-	// octroi de cadeaux, en fonction de la combo actuelle
-	
-	if(Math.random()<probaCadeau && user.combo!=0){
-		let cadeau=Math.ceil(user.combo*Math.random());
-		let m={
-				"date":new Date(),
-				"titre":"Cadeau !",
-				"icone":"FasGift",
-				"texte":`Petite surprise, tu gagnes ${cadeau} points !`
-			};
-			messages.push(m);
-			quiz.total+=cadeau; // évite de rappeler une deuxième fois la fonction ajouter, et de regénerer des messages de seuil
-	}
-}
-
-function octroyerBooster(){
-	// appelée lorsqu'un quiz est terminé,
-	// juste après avoir octroyé les points (ce qui a déjà ajouté des récompenses)
-	// et avant que l'utilisateur clique pour dépiler les messages et continuer
-
-	let d=new Date();
-	let heure=d.getHours();
-	// octroi de boosters
-	if(getBooster(new Date())==1){// boosters non cumulables
-		if(6<=heure && heure<8){ // octroi automatique matin
-			let b={
-				"debut"	: d,
-				"fin"		: new Date(d.getFullYear(),d.getMonth(),d.getDate(),8), 
-				"multiplicateur":2
-			};
-			user.boosters.push(b);
-			let m={
-				"date":new Date(),
-				"titre":"Booster du matin",
-				"icone":"FasStopwatch",
-				"texte":"Points doublés jusqu'à 8h !"
-			};
-			messages.push(m); // on affiche les boosters en dernier
-			user.trophees.push(m);
-		}
-		else if(12<=heure && heure<14){ // octroi automatique  midi 
-			let b={
-				"debut"	: d,
-				"fin"		: new Date(d.getFullYear(),d.getMonth(),d.getDate(),14), 
-				"multiplicateur":2
-			};
-			user.boosters.push(b);
-			let m={
-				"date":new Date(),
-				"titre":"Booster du midi",
-				"icone":"FasStopwatch",
-				"texte":"Points doublés jusqu'à 14h !"
-			};
-			messages.push(m); // on affiche les boosters en dernier
-			user.trophees.push(m);
-		}
-		else if(18<=heure && heure<20){ // octroi automatique soir
-			let b={
-				"debut"	: d,
-				"fin"		: new Date(d.getFullYear(),d.getMonth(),d.getDate(),20), 
-				"multiplicateur":2
-			};
-			user.boosters.push(b);
-			let m={
-				"date":new Date(),
-				"titre":"Booster du soir",
-				"icone":"FasStopwatch",
-				"texte":"Points doublés jusqu'à 20h !"
-			};
-			messages.push(m); // on affiche les boosters en dernier
-			user.trophees.push(m);
-		}
-		else if(Math.random()<probaBooster){ // octroi aléatoire le reste du temps
-			// on n'octroie des boosters que si celui-ci est à 1
-			let b={
-				"debut"	: new Date(),
-				"fin"		: new Date(new Date().getTime()+dureeBooster), 
-				"multiplicateur":2
-			};
-			user.boosters.push(b);
-			let m={
-				"date":new Date(),
-				"titre":`Booster de ${dureeBooster/60000} min`,
-				"icone":"FasStopwatch",
-				"texte":`Points doublés pendant ${dureeBooster/60000} minutes !`
-			};
-			messages.push(m); // on affiche les boosters en dernier
-			user.trophees.push(m);
-		}
-	}
-}
-
-
-function envoyerStatsServeur(){
-
-	// envoi des stats au php qui se charge d'updater le record si applicable
-	// afficher un message si record battu, aussi .
-	// utiliser 'fetch', maintenant
-	/*$.ajax({
-		method: 'post',
-		url: 'http://damienmegy.xyz/php/vf/vf_score.php',
-		data: {
-		  'theme' : t.nom,
-		  'heritage' : heritage,
-		  'record' : record,
-		  'stats' : JSON.stringify(stats),
-		  'bonus' : JSON.stringify(bonus)
-		}
-	});*/
-}
-
-
-
-
-function depiler(but="themes"){ // affiche les messages dans le tableau "message" jusqu'à le vider
-	// display none sur le message pour le fade-in/out ?
-	if(messages.length==0){
-		cacherMessage();
-		if(but=="info")
-			afficherInfoTheme(theme.id);
-		if(but=="themes")
-			afficherThemes();
-		if(but=="quiz")
-			demarrerQuiz();
-	}
-	else{
-		depilerMessage(but);
-	}
-	
-}
-
-
-
-
 
 
 
 // - - - -   A C T U A L I S A T I O N   A F F I C H A G E - - - - 
 
-function goto(e,mathjax=true){
-
-	window.clearTimeout(timeoutQuiz);
-
-	if(etat=="themes"){
-		// enregistrer le scoll actuel
-	}
+function goto(e,refreshMathJax=true){
+	window.clearTimeout(timeoutQuiz); // les lancements automatiques
+	// on devrait peut-être enregistrer le scroll actuel ?
 	etatPrecedent=etat; // au cas où
-	etat=e;
+	etat=e; //on change d'état
 
 	// aide visuelle en haut pour savoir où on est
 	// refaire, pas assez visible
@@ -968,42 +499,30 @@ function goto(e,mathjax=true){
 	}
 
 	// activation/désactivation du scroll :
-
+	window.scrollTo(0,0); // scroller à l'ancien scroll à la place ?
 	if(e=='themes' || e=='trophees'||e=='info'){
-		// scroller à l'ancien scroll ?
-		window.scrollTo(0,0); 
 		scroll();
 	}
 	else{
-		window.scrollTo(0,0); 
 		noScroll();
 	}
 	actualiserAffichage();
 
-	if(mathjax){
-		// ceci permet de faire goto sans réactualiser mathjax si on en veut pas, par exemple au démarrage
+	if(refreshMathJax){// par défaut, ==true
+		// ceci permet de faire goto sans réactualiser mathjax si on en veut pas, 
+		// par exemple au démarrage, puisque MathJax n'est pas encore chargé
 		actualiserMathJax();
 	}
 }
 
 
 
-function actualiserStatsQuestion(){
-	
-	let q=questions[question.num];
-	q.nbVues++;
-	q.derniereVue=new Date();
-	q.dernierScore=question.resultat;
-	q.points+= question.resultat;
-	q.scoreMoyen = q.points/q.nbVues; // entre -1 et 1
-	q.scoreRecent = (q.scoreRecent+question.resultat)/2; // donne un gros poids à la dernière réponse
-	// permet de savoir si on a bcp répondu correctement de suite dernièrement
 
-}
-
-function actualiserAffichage(){ // l'angular du pauvre :
+function actualiserAffichage(selecteur="body"){ // l'angular du pauvre :
 	let t=new Date().getTime();
-	document.querySelectorAll(".sync").forEach((el, i) => {
+	// le target dans lequel on va sync les machins. Par défaut c'est tout le document
+	let target=document.querySelector(selecteur);
+	target.querySelectorAll(".sync").forEach((el, i) => {
 		let f=window[el.dataset.action];//la fonction
 		let param=el.dataset.param;// avant eval
 		let paramEvalue = eval(param);//peut-on éviter ceci ??
@@ -1027,16 +546,11 @@ function actualiserMathJax(){
 	}
 }
 
-function actualiserBarres(a,b,c){
-	// entrées : valeurs entre 0 et 100, somme <100 si possible...
-	// actualisation des longueurs des barres de progression
-	document.getElementById("progress-rouge").style.width=a+"%";
-	document.getElementById("progress-jaune").style.width=b+"%";
-	document.getElementById("progress-vert").style.width=c+"%";
-
-}
-
 // - - - -   A C T U A L I S A T I O N   D E   D O N N E E S  - - - - 
+
+
+
+
 
 function getBooster(date){
 	date= new Date(date); // si date transformée en chaîne dans le storage
@@ -1053,83 +567,6 @@ function getBooster(date){
 	}
 	return m; 
 }
-
-
-function ajouter(total){
-	// peut servir à activer des bonus, boosters, afficher des splashscreens etc
-	//let total=n*getBooster(new Date()); // ici on peut tester les boosters
-	// tester ceci avant l'appel à cette fonction, ceci permet d'afficher l'effet du booster
-
-	historique.pointsGagnes.unshift({"date": new Date(), "points":total, "theme": quiz.id} );
-	
-	// update points aujourd'hui, 24h, cette semaine, 7j, ce mois-ci, 30j? 
-	// calcul : ceci sert aux trophées, ainsi qu'à l'affichage des stats dans la page "user"
-	let p=activiteRecente(); // nouveaux points récents : jour, mois etc
-
-	/*if(p.quizAujourdhui==1) { // premiers points de la journée
-
-		let m={
-			"date": new Date(),
-			"icone":"FasSnowman",
-			"titre":"Félicitations!",
-			"texte":"Ce sont les premiers points que tu sauvegardes aujourd'hui !"
-		}
-		messages.push(m);
-	}*/
-
-
-	if(Math.floor(user.pointsAujourdhui/200) < Math.floor(p.pointsAujourdhui/200) ){
-		let trophee={
-			"date": new Date(),
-			"icone":"FasDumbbell", // c'est une quête journaliere
-			"titre":`${200*Math.floor(p.pointsAujourdhui/200)} pts aujourd'hui !`,
-			"texte":`Bravo, tu as gagné plus de ${200*Math.floor(p.pointsAujourdhui/200)} points aujourd'hui!`
-		};
-		user.trophees.push(trophee);
-		messages.push(trophee);
-	}
-
-	// - - - trophées - - -
-
-	// seuil de niveau pour les points globaux
-	if(user.niveau!=niveau(p.points)){ // passage de niveau
-		user.niveau = niveau(p.points);
-		let trophee={
-			"date": new Date(),
-			"icone":"FasCircleUp",
-			"titre":`Lvl-up : niveau ${user.niveau}`,
-			"texte":`Tu as dépassé les ${10*(2**(user.niveau))} points !<br>
-								Prochain niveau : ${10*(2**(user.niveau+1))} points.`
-		};
-		user.trophees.push(trophee);
-		messages.push(trophee);// seront dépilés et affichés après l'épilogue
-	}
-
-	// barre des milliers de points
-	if(Math.floor(user.points/1000) < Math.floor(p.points/1000)){ // passage de milliers
-		let trophee={
-			"date": new Date(),
-			"icone":"FasCocktail",
-			"titre":`${Math.floor(p.points/1000)}K pts !`,
-			"texte":`Tu as dépassé les ${1000*Math.floor(p.points/1000)} points !`
-		};
-		user.trophees.push(trophee);
-		messages.push(trophee);// seront dépilés et affichés après l'épilogue
-	}
-
-
-	user={...user,...p}; // on update les points récents
-	// attention ceci modifie user, en modifiant aussi quizAujourd'hui, perfectsAUjourdhui etc.
-
-}
-
-
-
-
-
-
-
-
 
 
 
@@ -1206,6 +643,7 @@ function demarrage(){
 
 	} else{
 		console.log("localStorage n'est pas supporté");
+		//Mais l'appli marche quand même ! Il suffit de ne pas quiter l'onglet, a priori
 	}
 
 	for(id in chapitres){
@@ -1266,8 +704,9 @@ function demarrage(){
 		avatarImg.style.display="block";
 	}
 
-
-
+	document.querySelectorAll(".inerte").forEach((el)=>{
+		el.classList.remove("inerte");
+	});
 
 
 
@@ -1276,6 +715,18 @@ function demarrage(){
 
 	// fin de la fonction de démarrage
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1295,22 +746,229 @@ const setFont = (f)=>{
 }
 
 
+// - - - - - - - - -
+// STATS NON LOCALES
 
-
-/* - - - -- -  TODO
-
-minifier le js, par exemple les composants
-mettre les fonctions utilisées par les composants dans composants.js, ou dans app.js pour les autres
-décider si on inline les fonts en base64, si on met du svg parfois (premières icones), etc
-décider si on changer de police avec Nunito ? (google font donc open source)
-mettre en place un choix de loader flexible, changeable facilement, mais avant, accélérer le vrai chargement avec les svg etc
-coder quelques loader reliés aux maths, qui ne seront pas partout djavus
-
-
-- plus de questions, thèmes et chapitres
-- fabriquer les chapitres des questions de Maxime pour les séries, l'analyse asymtotique etc
+window.onload=function(){
+	// pas besoin de retour ?
+	// fetch('http://damienmegy.xyz/php/vf/vf_compteur.php'); 
+}
 
 
 
 
-*/
+// - - - - GESTION DE L'UPLOAD D'AVATAR - - - - - -
+
+// retourne une promesse d'image avec une url loadée dedans
+const loadImage = (url) => new Promise((resolve, reject) => {
+   const img = new Image();
+   img.addEventListener('load', () => resolve(img));
+   img.addEventListener('error', (err) => reject(err));
+   img.src = url;
+});
+
+// prend un type file (récupéré dans un 'input file') et le met dans un filereader
+// retourne une promesse de dataURL de ceci
+function readFileAsDataURL(file) {
+  return new Promise((resolve,reject) => {
+    let fileredr = new FileReader();
+    fileredr.onload = () => resolve(fileredr.result);
+    fileredr.onerror = () => reject(fileredr);
+    fileredr.readAsDataURL(file);
+  });
+}
+
+
+
+function getScript(scriptUrl, callback) {
+    const script = document.createElement('script');
+    script.src = scriptUrl;
+    script.onload = callback;
+
+    document.body.appendChild(script);
+}
+
+
+
+//les noms sont hérités de l'ancienne version
+window.toggle = function (el,bool) { // attention c'est pas un vrai toggle, il y a bool
+    el.style.display = bool ? '' : 'none';
+}
+window.html = function (el,content){
+	el.innerHTML=content;
+}
+
+
+// fonction générales:
+// - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+// utilisé pour afficher le niveau sur un thème (avec les points gagnés sur ce thème), ou globalement
+
+const  niveau = (points) => {
+	if(points<20)
+		return 0;
+	else 
+		return Math.floor(Math.log(points/10)/Math.log(2));
+}
+
+
+const prochainPalier = (points) => {// on retourne la prochaine (puissance de 2 multiplée par 10)
+		return 10* (2**(niveau(points)+1))
+}
+
+const triplet = (r=0) =>{ // r vaut 1, 0 ou -1, c'est le résultat à une question
+	let t=[0,0,0];
+	if(r==1)
+		t=[0,0,1];
+	else if (r==0)
+		t=[0,1,0];
+	else if (r==-1)
+		t=[1,0,0];
+	else
+		console.log("résultat non valable");
+	return t;
+}
+
+
+
+
+
+
+
+function tempsAujourdhui(){ // millisecondes aujourd'hui
+	const d= new Date();
+	return 1000*(d.getHours()*3600+d.getMinutes()*60+d.getSeconds());
+}
+
+function debutJournee(){ // retourne une date 
+	const d=new Date();
+	return new Date(d.getFullYear(), d.getMonth(), d.getDate() );
+}
+
+function debutSemaine(){ // retourne une date 
+	const d=new Date();
+	return new Date(d.getFullYear(), d.getMonth(), d.getDate()-d.getDay() );
+}
+
+function debutMois(){ // retourne une date 
+	const d=new Date();
+	return new Date(d.getFullYear(), d.getMonth() );
+}
+
+
+
+
+
+const isThisMonth = (someDate) => {
+	someDate=new Date(someDate);// au cas où la date a été tansformée en chaîne
+  const today = new Date();
+  return someDate.getMonth() == today.getMonth() &&
+    someDate.getFullYear() == today.getFullYear();
+}
+
+
+const isToday = (someDate) => {
+	someDate=new Date(someDate);// au cas où la date a été tansformée en chaîne
+  const today = new Date();
+  return someDate.getDate() == today.getDate() && isThisMonth(someDate) ;
+}
+
+
+
+const isThisWeek = (someDate) => {
+	someDate=new Date(someDate);// au cas où la date a été tansformée en chaîne
+	const today = new Date();
+	return getWeekNumber(someDate) == getWeekNumber(today) &&  someDate.getFullYear() == today.getFullYear();
+}
+
+const  getWeekNumber = (d) => {
+	d= new Date(d);
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return [d.getUTCFullYear(), weekNo];
+}
+
+
+
+
+
+function tripletQuestions(){
+	let reussies=0, sautees=0, ratees=0;
+	for (let q of historique.questionsVues){
+		// pour questions aujourd'hui
+		if(isToday(new Date(q.debut))){
+				if( q.resultat == 1 ){
+					reussies += 1;
+				} else if ( q.resultat == 0 ){
+					sautees += 1
+				} else {
+					ratees +=1;
+				}
+				
+		} else{ // on a dépassé la date
+			break;
+		}
+		
+	}
+	let t=[ratees,sautees,reussies];
+	return t;
+}
+
+
+
+
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - -
+
+// - - - - - - - - - - - - - - - - - - - - - - - - -
+
+// - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+
+
+const capitaliser = (str) => { // met le première caractère d'une chaîne en capitales
+	let r=str.charAt(0).toUpperCase() + str.slice(1);;
+	return r;
+}
+
+
+
+function iconeUser(pts){
+	let icone="";
+	if(pts>10000)
+		icone="FasRobot";
+	else if(pts>5000)
+		icone="FasUserAstronaut";
+	else if(pts>2000)
+		icone="FasUserGraduate";
+	else if(pts>500)
+		icone="FasBookOpenReader";
+	else if(pts>20)
+		icone="FasUserTie";
+	else
+		icone="FasUserLarge";
+	return icone;
+}
+
+// un composant...
+
+function htmlPoints(){
+	let s=`<span style="position:relative">${user.points} pt`;
+	if(user.points>0) s+="s";
+
+	s+=`<span class="notif">Niv. ${niveau(user.points)}</span`;
+	s+="</span>";
+	return s;
+}
+

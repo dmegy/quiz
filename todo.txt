@@ -1,3 +1,36 @@
+Commencer à faire la page crédits
+
+commencer à essayer d'intégrer les qcms exo7
+
+commencer l'export Arche
+
+faire un mode développeur avec un paramètre d'url, qui permet
+
+- d'enregistrer les données du storage ?
+
+
+
+
+Faire la navigation avec l'API navigation, avec un test si c'est supporté et sinon rien : de cette façon on ne recodera pas tout.
+
+Faire les fonctions de changement de couleur, avec les fonctions lch, idem
+
+
+
+Faire le côté serveur : faire un fichier php qui peut recevoir les données:
+
+un pour le compteur, mais avec un système de session pour ne pas spammer
+
+un quand on finit un quiz et que des point sont rajoutés, pour détecter le record battu 
+
+(fonction en local, mais fonction de vérfication en php)
+
+faire une fonction de vérification simple, qui compte les points, qui voit combien de point sont gagnés par minute, en fonction des bonus ?
+
+
+
+
+
 Vu qu'au début, les thèmes ne sont pas arrivés, et qu'on ne peut donc pas cliquer sur les icones, et donc qu'on n'affiche pas les icones avant le domcontentloaded, il faut virer les svg de l'index, ça sera affiché avec javascript et actualiserAffichage()
 
 Il faut aussi voir si on a besoin des questions au début : on n'a besoin que des chapitres et thèmes, pas des questions, enfin pas tout de suite. On pourrait charger les questions en async et pas en defer.

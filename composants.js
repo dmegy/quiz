@@ -17,7 +17,6 @@
 /* changer la façon d'encoder : encoder la chaîne de points (le 'd') */
 
 var svgPathFasFolderOpen		= `<path d="M88.7 223.8L0 375.8V96C0 60.7 28.7 32 64 32H181.5c17 0 33.3 6.7 45.3 18.7l26.5 26.5c12 12 28.3 18.7 45.3 18.7H416c35.3 0 64 28.7 64 64v32H144c-22.8 0-43.8 12.1-55.3 31.8zm27.6 16.1C122.1 230 132.6 224 144 224H544c11.5 0 22 6.1 27.7 16.1s5.7 22.2-.1 32.1l-112 192C453.9 474 443.4 480 432 480H32c-11.5 0-22-6.1-27.7-16.1s-5.7-22.2 .1-32.1l112-192z"/>`;
-var svgPathFasShuffle			= `<path d="M403.8 34.4c12-5 25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V160H352c-10.1 0-19.6 4.7-25.6 12.8L284 229.3 244 176l31.2-41.6C293.3 110.2 321.8 96 352 96h32V64c0-12.9 7.8-24.6 19.8-29.6zM164 282.7L204 336l-31.2 41.6C154.7 401.8 126.2 416 96 416H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c10.1 0 19.6-4.7 25.6-12.8L164 282.7zm274.6 188c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V416H352c-30.2 0-58.7-14.2-76.8-38.4L121.6 172.8c-6-8.1-15.5-12.8-25.6-12.8H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c30.2 0 58.7 14.2 76.8 38.4L326.4 339.2c6 8.1 15.5 12.8 25.6 12.8h32V320c0-12.9 7.8-24.6 19.8-29.6s25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64z"/>`;
 var svgPathFasArrowRight		= `<path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>`;
 var svgPathFasDumbbell		= `<path d="M112 96c0-17.7 14.3-32 32-32h16c17.7 0 32 14.3 32 32V224v64V416c0 17.7-14.3 32-32 32H144c-17.7 0-32-14.3-32-32V384H64c-17.7 0-32-14.3-32-32V288c-17.7 0-32-14.3-32-32s14.3-32 32-32V160c0-17.7 14.3-32 32-32h48V96zm416 0v32h48c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32H528v32c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32V288 224 96c0-17.7 14.3-32 32-32h16c17.7 0 32 14.3 32 32zM416 224v64H224V224H416z"/>`;
 var svgPathFasPlay			= `<path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/>`;
@@ -45,10 +44,6 @@ var svgPathFasCircleCheck 	= `<path d="M256 512c141.4 0 256-114.6 256-256S397.4 
 /* Fa regular ?*/
 var svgPathFarCircleCheck = `<path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2 339.8L140.2 275.8C129.3 264.9 129.3 247.1 140.2 236.2C151.1 225.3 168.9 225.3 179.8 236.2L224 280.4L332.2 172.2C343.1 161.3 360.9 161.3 371.8 172.2C382.7 183.1 382.7 200.9 371.8 211.8L243.8 339.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"/>`;
 
-var svgPathFarFaceMeh			= `<path d="M144.4 208C144.4 190.3 158.7 176 176.4 176C194 176 208.4 190.3 208.4 208C208.4 225.7 194 240 176.4 240C158.7 240 144.4 225.7 144.4 208zM368.4 208C368.4 225.7 354 240 336.4 240C318.7 240 304.4 225.7 304.4 208C304.4 190.3 318.7 176 336.4 176C354 176 368.4 190.3 368.4 208zM328 328C341.3 328 352 338.7 352 352C352 365.3 341.3 376 328 376H184C170.7 376 160 365.3 160 352C160 338.7 170.7 328 184 328H328zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464z"/>`;
-var svgPathFasFaceMeh			= `<path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM176.4 240c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm192-32c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32zM160 336H352c8.8 0 16 7.2 16 16s-7.2 16-16 16H160c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>`;
-var svgPathFasThumbsUp		= `<path d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 25.3-19.5 46-44.3 47.9c7.7 8.5 12.3 19.8 12.3 32.1c0 23.4-16.8 42.9-38.9 47.1c4.4 7.2 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z"/>`;
-var svgPathFasChampagneGlasses= `<path d="M320 128V49.1L186.6 .3c-11.4-4.2-24 .9-29.5 11.7L71.8 181.1c-30.8 61-8 133.8 48.1 167.4l-28 77.4L32.1 403.9C19.7 399.4 6 405.8 1.4 418.3s1.9 26.3 14.3 30.8l164.6 60.3c12.4 4.5 26.1-1.9 30.6-14.4s-1.9-26.3-14.3-30.8l-59.9-21.9 28-77.3c68.1 11.6 135.7-32.8 150.1-103.6l5.1-24.8 5.1 24.8c14.5 70.8 82 115.2 150.1 103.6l28 77.3-59.9 21.9c-12.4 4.5-18.8 18.3-14.3 30.8s18.2 18.9 30.6 14.4l164.6-60.3c12.4-4.5 18.8-18.3 14.3-30.8s-18.2-18.9-30.6-14.4l-59.9 21.9-28-77.4c56.1-33.6 78.8-106.4 48.1-167.4L482.9 12C477.4 1.1 464.7-3.9 453.4 .3L320 49.1V128h0zm-35.7 44.4L153.9 124.6l36.3-71.9L300.6 93.1l-16.2 79.3zm71.3 0L339.4 93.1 449.8 52.7l36.3 71.9L355.7 172.4z"/>`;
 
 
 var svgPathFasUserLarge		= `<path d="M224 0c70.7 0 128 57.3 128 128s-57.3 128-128 128s-128-57.3-128-128S153.3 0 224 0zM209.1 359.2l-18.6-31c-6.4-10.7 1.3-24.2 13.7-24.2H224h19.7c12.4 0 20.1 13.6 13.7 24.2l-18.6 31 33.4 123.9 39.5-161.2c77.2 12 136.3 78.8 136.3 159.4c0 17-13.8 30.7-30.7 30.7H265.1 182.9 30.7C13.8 512 0 498.2 0 481.3c0-80.6 59.1-147.4 136.3-159.4l39.5 161.2 33.4-123.9z"/>`;
@@ -83,22 +78,7 @@ function htmlBoutonTheme(id){
 }
 
 
-function htmlQuestion(n){
-	// entrée : le numéro absolu de la question (pas l'objet 'question' lui-même!), 
-	//sortie : un div display:none avec l'énoncé et les réponses possibles
-	let s=`<div class="question full-height" id="question-${n}" style="display:none">
-				<p class="question-enonce">${questions[n].texte}</p>
-				<div class="question-choix">
-				<form>`;
-	for(let i=0;i<questions[n].reponses.length;i++){
-		s+=			`<label id='label-question-${n}-choix-${i}' class='bouton-conteneur'><input type='radio' name='q' id='question-${n}-choix-${i}' autocomplete='off'><div id='bouton-question-${n}-choix-${i}' class='bouton bouton-dark'>${questions[n].reponses[i].texte}</div></label>`;
-	}
-	s+=				`<label id='label-question-${n}-choix--1' class='bouton-conteneur'><input type='radio' name='q' id='question-${n}-choix--1' autocomplete='off'><div id='bouton-question-${n}-choix--1' class='bouton bouton-dark'>Je ne sais pas</div></label>
-				</form>
-				</div>
-			</div>`;
-	return s;
-}
+
 
 function htmlTripleBarre([a,b,c]){
 	// retourne un div html avec des barres de progression dans le ratio a:b:c
@@ -130,21 +110,6 @@ function htmlBarre(a,b){
 }
 
 
-
-
-function htmlIconeResultat(r){
-	// r est le résultat à une question -1, 0 ou 1
-	// sortie : une icone de cercle avec check, ! ou X
-	let s=`<svg class="svg-icone" viewBox="0 0 512 512">`;
-	if(r==1)
-		s+=svgPathFasCircleCheck;
-	if(r==-1)
-		s+=svgPathFasCircleXmark;
-	if(r==0)
-		s+=svgPathFasCircleExclamation;
-	s+=`</svg>`;
-	return s;
-}
 
 
 function htmlTrophee(trophee){
@@ -295,113 +260,5 @@ function htmlCheckbox(bool){
 
 
 
-function htmlIconeNote(note){
-	let icone='';
-	if(note==20) icone="FasTrophy";
-	else if (note>=15) icone="FasChampagneGlasses";
-	else if (note>=10) icone="FasThumbsUp";
-	else icone="FasFaceMeh";
-
-	let s=`<svg class="svg-icone svg-strong-glow" viewBox="0 0 600 512">${globalThis['svgPath'+icone]}"></svg>`;
-	return s;
-}
-
-// pas vraiment de l'html mais bon c'est un composant d'affichage
-function iconeUser(pts){
-	let icone="";
-	if(pts>10000)
-		icone="FasRobot";
-	else if(pts>5000)
-		icone="FasUserAstronaut";
-	else if(pts>2000)
-		icone="FasUserGraduate";
-	else if(pts>500)
-		icone="FasBookOpenReader";
-	else if(pts>20)
-		icone="FasUserTie";
-	else
-		icone="FasUserLarge";
-	return icone;
-}
-
-/* simplifier, mettre directement*/
-function htmlIconeUser(pts){
-	return `<svg class="svg-icone" viewBox="0 0 550 512">
-				${window['svgPath'+iconeUser(pts)]}
-			</svg>`;
-}
-
-function htmlNotif(texte){
-	let s=`<span class="notif">${texte}</span>`;
-	return s;
-}
-
-function htmlPoints(){
-	let s=`<span style="position:relative">${user.points} pt`;
-	if(user.points>0) s+="s";
-
-	s+=htmlNotif("Niv. "+niveau(user.points));
-	s+="</span>";
-	return s;
-}
 
 
-
-
-
-
-
-
-// - - - - - -
-// MESSAGES / "alertes", pas vraiment des composants : fonctions qui affectent le DOM
-// en particulier, chaque fois que l'on gagne un trophée, on affiche un message de félicitation
-
-function afficherChaine(html=""){
-	let contenu=document.getElementById('message-contenu');
-	contenu.replaceChildren(); // on vide le div de contenu
-	contenu.innerHTML+=html;
-	contenu.innerHTML+=`<button class='bouton bouton-conteneur bouton-coul large' onclick='cacherMessage()'>Fermer</button>`;
-	// on rend visible :
-	document.getElementById('message').style.display="block";
-}
-
-function afficherMessage(message){
-	// un message a un titre, une icône, un texte, une date (non affichée)
-	// on peut passer un trophée, par exemple
-	let contenu=document.getElementById('message-contenu');
-	contenu.replaceChildren(); // on vide le div de contenu
-	let s=`	<h1>
-				<svg class="svg-icone svg-strong-glow" viewBox="0 0 600 512">${globalThis['svgPath'+message.icone]}</svg>
-			</h1>
-			<h1>${message.titre}</h1>
-			<p>${message.texte}</p>
-		`;
-	contenu.innerHTML+=s;
-	contenu.innerHTML+=`<button class='bouton bouton-conteneur bouton-coul large' onclick='cacherMessage()'>Fermer</button>`;
-	// on rend visible :
-	document.getElementById('message').style.display="block";
-}
-
-function cacherMessage(){
-	document.getElementById('message').style.display="none";
-}
-
-
-
-function depilerMessage(but="themes"){ // attention ceci affecte l'objet global messages
-	let message=messages.pop();
-	// un message a un titre, une icône, un texte, une date (non affichée)
-	// on peut passer un trophée, par exemple
-	let contenu=document.getElementById('message-contenu');
-	contenu.replaceChildren(); // on vide le div de contenu
-	let s=`	<h1>
-				<svg class="svg-icone svg-strong-glow" viewBox="0 0 600 512">${globalThis['svgPath'+message.icone]}</svg>
-			</h1>
-					<h1>${message.titre}</h1>
-					<p>${message.texte}</p>
-		`;
-	contenu.innerHTML+=s;
-	contenu.innerHTML+=`<button class="bouton bouton-conteneur bouton-coul large" onclick="depiler('${but}')">Fermer</button>`;
-	// on rend visible :
-	document.getElementById('message').style.display="block";
-}
