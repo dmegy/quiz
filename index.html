@@ -67,7 +67,7 @@
   			padding: 1rem;
   		}
 			h3faux {
-				--c-texte:var(--c-secondaire-accent);
+				--c-texte:var(--c-secondaire-accent-fort);
 				color:var(--c-texte);
   			display:inline-block;
   			font-size: 1.5rem;
@@ -126,6 +126,8 @@
 				--c-secondaire-moyen : hsl(var(--teinte-secondaire) 100% 10%);
 			  --c-secondaire : hsl(var(--teinte-secondaire) 100% 16%); /* pour boutons avec texte blanc*/
 			  --c-secondaire-accent : hsl(var(--teinte-secondaire) 80% 29%); /* pour titres */
+			  --c-secondaire-accent-fort : hsl(var(--teinte-secondaire) 80% 35%); 
+			  /* pour le faux h3 qui n'est pas gras, pour lui donner plus de contraste, sinon il ne passe pas le standard de contraste */
 
 			  
 
