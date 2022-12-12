@@ -521,12 +521,43 @@ function goto(e,refreshMathJax=true){
 }
 
 
+/*function actualiserAffichage(selecteur="body"){ // l'angular du pauvre :
+	let t=new Date().getTime();
+	// le target dans lequel on va sync les machins. Par défaut c'est tout le document
+	let target=document.querySelector(selecteur);
+
+	target.querySelectorAll(".sync").forEach((el, i) => {
+		if(el.dataset.action=="toggle"){
+			el.style.display=eval(el.dataset.param);
+		}
+		else if (el.dataset.action=="html"){
+
+			let paramEvalue=eval(el.dataset.param);
+			//console.log("l'élément "+el+ " est visible, on tente de changer son innerHTML avec "+paramEvalue);
+			el.innerHTML=paramEvalue;
+		}
+		else {
+			console.log(`actualiserAffichage() : action ${el.dataset.action} non autorisée.`)
+		}
+	});
+	console.log("Page rendue en "+(new Date().getTime()-t)+" ms");
+}*/
+
+
+//les noms sont hérités de l'ancienne version
+window.toggle = function (el,bool) { // attention c'est pas un vrai toggle, il y a bool
+    el.style.display = bool ? '' : 'none';
+}
+window.html = function (el,content){
+	el.innerHTML=content;
+}
 
 
 function actualiserAffichage(selecteur="body"){ // l'angular du pauvre :
 	let t=new Date().getTime();
 	// le target dans lequel on va sync les machins. Par défaut c'est tout le document
 	let target=document.querySelector(selecteur);
+
 	target.querySelectorAll(".sync").forEach((el, i) => {
 		let f=window[el.dataset.action];//la fonction
 		let param=el.dataset.param;// avant eval
@@ -539,6 +570,10 @@ function actualiserAffichage(selecteur="body"){ // l'angular du pauvre :
 	});
 	console.log("Page rendue en "+(new Date().getTime()-t)+" ms");
 }
+
+
+
+
 
 
 function actualiserMathJax(){
@@ -752,9 +787,16 @@ const setFont = (f)=>{
 
 
 // - - - - - - - - -
-// STATS NON LOCALES
 
-window.onload=function(){
+// on pourrait charger ça en async dans le index.html, mais alors on ne serait pas sûr que ça arrive après les autres
+// or ça a besoin des autres fonctions.
+
+window.addEventListener('DOMContentLoaded',()=>{
+	getScript("app2.js");
+});
+
+
+window.addEventListener('load',()=>{
 	// pas besoin de faire ceci avant ? 
 	// coup de pocker, il faudra que ça soit loadé avant qu'on affiche les autres catégories...
 	// mais sinon ça délaye le load pour rien. Est-ce très grave ?
@@ -774,10 +816,12 @@ window.onload=function(){
 	document.head.insertAdjacentHTML('beforeend',`<link rel="preload" as="font" crossorigin href="assets/nunito-v16-latin-900.woff2" type="font/woff2">`)
 
 
-
+	// - - - COMPTEUR - - - - - 
 	// pas besoin de retour ?
 	// fetch('http://damienmegy.xyz/php/vf/vf_compteur.php'); 
-}
+
+
+});
 
 
 
@@ -815,13 +859,7 @@ function getScript(scriptUrl, callback) {
 
 
 
-//les noms sont hérités de l'ancienne version
-window.toggle = function (el,bool) { // attention c'est pas un vrai toggle, il y a bool
-    el.style.display = bool ? '' : 'none';
-}
-window.html = function (el,content){
-	el.innerHTML=content;
-}
+
 
 
 // fonction générales:
@@ -989,11 +1027,11 @@ function iconeUser(pts){
 // un composant...
 
 function htmlPoints(){
-	let s=`<span style="position:relative">${user.points} pt`;
+	let s=`<span style="font-weight:400"><span style="position:relative">${user.points} pt`;
 	if(user.points>0) s+="s";
 
 	s+=`<span class="notif">Niv. ${niveau(user.points)}</span`;
-	s+="</span>";
+	s+="</span></span>";
 	return s;
 }
 

@@ -35,34 +35,7 @@ function htmlQuestion(n){
 
 
 
-function htmlIconeResultat(r){
-	// utilisé pour la correction des questions
-	// r est le résultat à une question -1, 0 ou 1
-	// sortie : une icone de cercle avec check, ! ou X
-	let s=`<svg class="svg-icone" viewBox="0 0 512 512">`;
-	if(r==1)
-		s+=svgPathFasCircleCheck;
-	if(r==-1)
-		s+=svgPathFasCircleXmark;
-	if(r==0)
-		s+=svgPathFasCircleExclamation;
-	s+=`</svg>`;
-	return s;
-}
 
-
-
-function htmlIconeNote(note){
-	// écran de fin de quiz
-	let icone='';
-	if(note==20) icone="FasTrophy";
-	else if (note>=15) icone="FasChampagneGlasses";
-	else if (note>=10) icone="FasThumbsUp";
-	else icone="FasFaceMeh";
-
-	let s=`<svg class="svg-icone svg-strong-glow" viewBox="0 0 600 512">${globalThis['svgPath'+icone]}"></svg>`;
-	return s;
-}
 
 
 
@@ -466,7 +439,7 @@ function fin(){ // Calcul des bonus de fin et affichage des stats de fin :
 	but.append(...source.children);
 	// on affiche :
 	document.querySelectorAll("#correction > div").forEach((el)=>{el.style.display="";});
-	// on devrait colorier, ou alors à la correction
+	
 
 
 	goto("fin"); // chgt d'état et affichage

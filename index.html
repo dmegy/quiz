@@ -214,7 +214,7 @@
 			  justify-content: center;
 			  align-items: center;
 			  font-size: 1.5rem;
-			  font-weight: bold;
+			  font-weight: 400;/*police grasse pas chargée au début !*/
 			  text-shadow: 0 0 .5em var(--c-accent);
 			}
 
@@ -440,8 +440,6 @@
 		<script type="text/javascript" defer src="composants.js"></script>
 		<script type="text/javascript" defer src="themes.js"></script>
 		<script type="text/javascript" defer src="app.js"></script>
-
-		<script type="text/javascript" async src="app2.js"></script>
 
 		
   </head>
@@ -870,11 +868,20 @@
 		   Nouveau quiz
 	</div>
 
-		 <h4>Correction : </h4>
+		 <h4 style="padding-top:1rem">Correction : </h4>
+		 <p>(Le choix effectué apparaît en surbrillance. Parfois, un commentaire explicatif est affiché.)</p>
 
 		<div id="correction" style="flex-direction:column-reverse;">
 			<!--- - - - - correction - - - - - -->
 		</div>
+
+		<p style="text-align: justify;text-justify:auto">Note : s'il y a un problème avec une question, le numéro de la question peut aider à signaler ce problème.
+		Cela dit, les énoncés sont normalement corrects et le diable se cache dans les détails.</p>
+		<p style="text-align: justify;text-justify:auto">Par exemple, il est <u>faux</u> que tout losange a exactement deux axes de symétrie, ou encore que les axes de symétrie d'un losange sont ses diagonales.
+		En effet ce losange pourrait être un carré. Une assertion correcte est par exemple que tout losange admet <u>au moins</u> deux axes de symétrie.</p>
+		<p style="text-align: justify;text-justify:auto">S'il y a réellement un problème avec une question, il sera bientôt possible de la signaler via github.
+		En attendant, il faut me contacter par mail, mais après avoir demandé des explications à un enseignant.</p>
+		
 
 	</div> <!-- - - - / R E S U L T A T S  - - - - - -->	
 
@@ -952,7 +959,7 @@
 
 	
 
-	
+
 	<!-- Mathjax config -->
 	
 	<script type="text/x-mathjax-config">
