@@ -19,6 +19,26 @@
 		<meta name="twitter:title" content="Quiz Mathématiques (Vrai/Faux)">
 		<meta name="twitter:description" content="Questionnaires niveau collège à bac+1 : calcul mental, calcul littéral, équations, trigonométrie, nombres complexes, fonctions, quantificateurs, logique, algèbre linéaire...">
 		<meta name="twitter:image" content="http://dmegy.perso.math.cnrs.fr/vf2/assets/twittercard.jpg?123">
+
+
+
+  	<link rel="preload" href="themes.js" as="script">
+  	<link rel="preload" href="composants.js" as="script">
+  	<link rel="preload" href="app.js" as="script">
+  	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
+
+
+  	<!-- ceci fait ramer alors que ça devrait pas ! -->
+		<!--<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2020"></script>-->
+		<script type="text/javascript" defer src="composants.js"></script>
+		<script type="text/javascript" defer src="themes.js"></script>
+		<script type="text/javascript" defer src="app.js"></script>
+		
+		<script type="text/javascript" async src="app2.js"></script>
+
+
+		<link href="style.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+
     
   	<style>
 
@@ -354,16 +374,6 @@
   	</style>
 
 
-  	<!-- - - - le temps que les polices arrivent, on lance les connexions - - -->
-
-		<!-- plus besoin, c'est le worker qui charge ça<link rel="preload" href="questions.js" as="script">-->
-  	<link rel="preload" href="themes.js" as="script">
-  	<link rel="preload" href="composants.js" as="script">
-  	<link rel="preload" href="app.js" as="script">
-  	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
-		<link href="style.css" rel="preload" as="style" onload="this.rel='stylesheet'">
-
-
 		
 
 		
@@ -390,20 +400,12 @@
 
 
 
+
 		<script type="text/javascript">
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 			//- - - -   I N L I N E D   W O R K E R  !!  - - - - - -
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-			let demarragePossible=false;
-			function tenterDemarrage(){
-				if(!demarragePossible){
-					console.log("Démarrage impossible pour l'instant mais feu vert accordé")
-					demarragePossible=true;
-				} else{
-					console.log("Démarrage possible")
-					demarrage();
-				}
-			}
+			let questionsChargees=false;
 			var workerSource=`
 			  onmessage = (evt) => {
 			    const base = evt.data;
@@ -419,13 +421,12 @@
 			var Hermann = new Worker(workerURL);
 			Hermann.postMessage( document.baseURI );
 			Hermann.onmessage = function(e) {
+				questionsChargees=true;
 				_questions=e.data;
-				console.log("liste des questions reçue ! Il y en a "+_questions.length);
+				console.log("La liste des questions est arrivée ! Il y en a "+_questions.length);
 
 				URL.revokeObjectURL(workerURL); // là on est sûr que c'est ok.
 				Hermann.terminate(); // ou pas ?
-				console.log("Hermann tente le démarrage.")
-				tenterDemarrage(); // ceci démarre, ou bien si la fonction 
 			}
 		</script>
 		
@@ -434,12 +435,6 @@
 
 		<!-- - - - - - -->
 		
-  	
-  	<!-- ceci fait ramer alors que ça devrait pas ! -->
-		<!--<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2020"></script>-->
-		<script type="text/javascript" defer src="composants.js"></script>
-		<script type="text/javascript" defer src="themes.js"></script>
-		<script type="text/javascript" defer src="app.js"></script>
 
 		
   </head>

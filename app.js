@@ -791,9 +791,6 @@ const setFont = (f)=>{
 // on pourrait charger ça en async dans le index.html, mais alors on ne serait pas sûr que ça arrive après les autres
 // or ça a besoin des autres fonctions.
 
-window.addEventListener('DOMContentLoaded',()=>{
-	getScript("app2.js");
-});
 
 
 window.addEventListener('load',()=>{
@@ -1040,4 +1037,4 @@ function htmlPoints(){
 
 
 console.log("app.js tente le démarrage")
-tenterDemarrage();
+demarrage();
