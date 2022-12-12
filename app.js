@@ -1,3 +1,8 @@
+//todo
+// bugs dûs au fait qu'on veut synx tout, même les choses non visibles
+// par exemple l'écran de fin avec la note, et donc avec l'icone de note
+// or ceci est dans app2.js
+// changer actualiserAffichage pour checker si un element est visible avant de lui appliquer la méthode "html" ?
 
 
 // - - - - - - - - - - - - - - - - - - - - - - -
@@ -750,6 +755,26 @@ const setFont = (f)=>{
 // STATS NON LOCALES
 
 window.onload=function(){
+	// pas besoin de faire ceci avant ? 
+	// coup de pocker, il faudra que ça soit loadé avant qu'on affiche les autres catégories...
+	// mais sinon ça délaye le load pour rien. Est-ce très grave ?
+	// sinon, inliner dans une balise script avec defer ? mais ce n'est pas possible
+	document.head.insertAdjacentHTML('beforeend',`
+		<style>
+		@font-face { 
+			  font-family: "Nunito";
+			  font-weight: 900 ;
+			  font-style: normal;
+			  src: url("assets/nunito-v16-latin-900.woff2");
+			 }
+			</style>`);
+	// on met également le preload
+	// sinon, comme il n'y a rien en gras dans la page, rien ne se passe 
+	// et la police ne sera pas prête lorsqu'on ira sur les autres vues
+	document.head.insertAdjacentHTML('beforeend',`<link rel="preload" as="font" crossorigin href="assets/nunito-v16-latin-900.woff2" type="font/woff2">`)
+
+
+
 	// pas besoin de retour ?
 	// fetch('http://damienmegy.xyz/php/vf/vf_compteur.php'); 
 }
