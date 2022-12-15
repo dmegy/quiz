@@ -21,6 +21,13 @@
 // - - - - - - V A R I A B L E S - - - - - - - - 
 
 
+let premiereVue=true;
+let sessionEnCours=false;
+
+// transformation nombres en b64
+const digit="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+toB64=x=>x.toString(2).split(/(?=(?:.{6})+(?!.))/g).map(v=>digit[parseInt(v,2)]).join("");
+fromB64=x=>x.split("").reduce((s,v)=>s*64+digit.indexOf(v),0);
 
 
 
@@ -45,12 +52,15 @@ let historique={
 	"pointsGagnes":[]	// tableau avec chaque ajout de points, et la date
 };
 
+let t0=new Date();
 /* ATTENTION faire le ménage dans les propriétés*/
 let user={
-	"premiereConnexion":new Date(),
-	"pseudo":"",
+	"premiereConnexion":t0,
+	"userId":toB64(t0.getTime()),
+	"pseudo":"user"+toB64(t0.getTime()), 
 	"avatar":"", /* type : dataURL*/
-	"affiliation":"", // lycée, ou club, ou "UL", ou autre ?
+	"affiliationEtablissement":"",
+	"affiliationClub":"",
 	"points":0,
 	"pointsAujourdhui":0,
 	"points24h":0,
@@ -165,6 +175,16 @@ const isLocalStorageEnabled = () => {
     return false;
   }
 };
+const isSessionStorageEnabled = () => {
+  try {
+    const key = `__session__test`;
+    window.sessionStorage.setItem(key, null);
+    window.sessionStorage.removeItem(key);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 
 /* virer, utiliser structuredClone() en natif */
@@ -181,8 +201,11 @@ const clone= (obj)=> {
 
 
 function sauvegarder(){
+	console.log("sauvegarde");
 	// enregistrement des résultats en local :
 	if (typeof(Storage) !== "undefined") {
+		console.log("progression quadrilatères : "+themes["quadrilateres"].progression);
+
 		window.localStorage.setItem('questions',JSON.stringify(questions));
 		window.localStorage.setItem('themes',JSON.stringify(themes));
 		window.localStorage.setItem('chapitres',JSON.stringify(chapitres));
@@ -377,6 +400,7 @@ function afficherThemes(){
 	// 2. ça nécessite d'avoir chargé tout le data lors de l'execution de app.js
 	// D'autre part, redessiner tous les boutons est très rapide
 	
+	// on vide tout :
 	document.getElementById("themes").replaceChildren();
 
 	for (let idChap in chapitres){
@@ -391,16 +415,18 @@ function afficherThemes(){
 		document.getElementById("themes").insertAdjacentHTML("beforeend",`<div id='chapitre_${idChap}' class='margin-l-r'></div>`);
 
 		chapitres[idChap].points=0;
-		for(let idTheme of themesDuChapitre){
+		for(let idTheme of themesDuChapitre){// deuxième boucle for
+
 			calculerStatsTheme(idTheme);
 			chapitres[idChap].points+=themes[idTheme].points;
+
+
 			document.getElementById("chapitre_"+idChap).insertAdjacentHTML("beforeend",htmlBoutonTheme(idTheme));
 
 			// update variables css pour l'affichage des progressions sur le bouton
-			let el=document.getElementById("boutonTheme_"+idTheme);
-			if(el!=null){
-				el.style.setProperty('--progression', themes[idTheme].progression);
-			}
+			// l'élément a été créé par le composant
+			document.getElementById("boutonTheme_"+idTheme).style.setProperty('--progression', themes[idTheme].progression);
+
 
 		}
 	}
@@ -490,6 +516,17 @@ function afficherInfoTheme(id){ // lorsqu'on clique sur un thème :
 // - - - -   A C T U A L I S A T I O N   A F F I C H A G E - - - - 
 
 function goto(e,refreshMathJax=true){
+	// ne pas essayer de sauvegarder des le début, les champs input n'existent pas encore
+	if(!premiereVue){
+		user.pseudo = document.getElementById("inputPseudo").value;
+		user.affiliationClub=document.getElementById("inputClub").value;
+		user.affiliationEtablissement=document.getElementById("inputEtablissement").value;
+		window.localStorage.setItem('user',JSON.stringify(user)); // on enregistre le pseudo etc tt de suite
+
+	}
+	else
+		premiereVue=false;
+
 	window.clearTimeout(timeoutQuiz); // les lancements automatiques
 	// on devrait peut-être enregistrer le scroll actuel ?
 	etatPrecedent=etat; // au cas où
@@ -513,6 +550,8 @@ function goto(e,refreshMathJax=true){
 	}
 	actualiserAffichage();
 
+	
+	
 	if(refreshMathJax){// par défaut, ==true
 		// ceci permet de faire goto sans réactualiser mathjax si on en veut pas, 
 		// par exemple au démarrage, puisque MathJax n'est pas encore chargé
@@ -568,6 +607,23 @@ function actualiserAffichage(selecteur="body"){ // l'angular du pauvre :
 			console.log(el.dataset.action+" n'est pas une fonction")
 		}
 	});
+	// - - - - - - - 
+	// remettre les bonnes valeurs dans les inpu d'affiliation etc 
+	document.getElementById("inputPseudo").value=user.pseudo;
+	let inputClub = document.getElementById("inputClub");
+  for (var i = 0; i < inputClub.options.length; ++i) {
+    if (inputClub.options[i].text === user.affiliationClub)
+      inputClub.options[i].selected = true;
+  }
+  let inputEtablissement = document.getElementById("inputEtablissement");
+  for (var i = 0; i < inputEtablissement.options.length; ++i) {
+    if (inputEtablissement.options[i].text === user.affiliationEtablissement)
+      inputEtablissement.options[i].selected = true;
+  }
+  //- - - - - - - --
+
+
+
 	console.log("Page rendue en "+(new Date().getTime()-t)+" ms");
 }
 
@@ -624,6 +680,33 @@ dans ce cas, le window.onload n'arrive pas, mais ça ne bloque pas l'application
 function demarrage(){
 	console.log("Demarrage")
 
+
+	questions=structuredClone(_questions);
+ 	for(let i=0;i<questions.length;i++){
+		let nouvellesProp={'derniereVue':0,'points':0,'nbVues':0,'scoreMoyen':0,'scoreRecent':0,'dernierScore':0,'resultat':0};
+		questions[i]={...questions[i],...nouvellesProp};
+	}
+
+	themes=structuredClone(_themes);
+	for(id in themes){
+		let nouvellesProp={
+			'id':id, //pratique, chaque theme contient son id
+		'nbQuestions':themes[id].questions.length, // pratique aussi
+		'nbQuestionsVues':0,
+		'nbQuestionsReussies':0,
+		'nbQuestionsConsolidees':0,
+		'progression':0,
+		'progressionConsolidee':0,
+		'points':0 		//pts gagnés sur ce thème, update en fin de quiz
+		};
+		themes[id]={...themes[id],...nouvellesProp}; // on rajoute les nouvelles propriétés
+	}
+
+	chapitres=structuredClone(_chapitres);
+
+
+
+
 	if (isLocalStorageEnabled()) { // si localStorage est supporté :
 		if (window.localStorage.getItem("premiereConnexion") !== null) 
 			messageAccueil="Te revoilà !";
@@ -640,50 +723,31 @@ function demarrage(){
 		if (window.localStorage.getItem("user") !== null) 
 		  user= {...user,...JSON.parse(window.localStorage.getItem('user'))};
 
+
+
+		
+		// maintenant on rajoue ceu qu'il y avait dans le storage, qui écrase ce qui précède
 		if (window.localStorage.getItem("questions") !== null){
-			questions= JSON.parse(window.localStorage.getItem('questions'));
-		 } else {
-		 	questions=structuredClone(_questions);
-		 	for(let i=0;i<questions.length;i++){
-		 		// on rajoute des propriétés vides aux questions (stats de la question)
-				// dernière vue sera une date quand on aura vu la question
-				let nouvellesProp={'derniereVue':0,'points':0,'nbVues':0,'scoreMoyen':0,'scoreRecent':0,'dernierScore':0,'resultat':0};
-				questions[i]={...questions[i],...nouvellesProp};
+			// les questions dans le storage écrasent les autres, mais il pouvait y en avoir de nouvelles dans questions.js
+			let questionsStockees = JSON.parse(window.localStorage.getItem('questions'));
+			for (let i = 0 ; i < questionsStockees.length;i++){
+				questions[i]= structuredClone(questionsStockees[i]);
 			}
+			
 		 }
 
-		 if (window.localStorage.getItem("themes") !== null){
-			themes= JSON.parse(window.localStorage.getItem('themes'));
-		 } else {
-		 	themes=structuredClone(_themes);
-		 	for(id in themes){
-		 		let nouvellesProp={
-		 			'id':id, //pratique, chaque theme contient son id
-					'nbQuestions':themes[id].questions.length, // pratique aussi
-					'nbQuestionsVues':0,
-					'nbQuestionsReussies':0,
-					'nbQuestionsConsolidees':0,
-					'progression':0,
-					'progressionConsolidee':0,
-					'points':0 		//pts gagnés sur ce thème, update en fin de quiz
-				};
-				themes[id]={...themes[id],...nouvellesProp}; // on rajoute les nouvelles propriétés
-			}
-		}
+
+		if (window.localStorage.getItem("themes") !== null){
+			themes= {...chapitres, ...JSON.parse(window.localStorage.getItem('themes'))};
+		 } 
 
 		 if (window.localStorage.getItem("chapitres") !== null){
-			chapitres= JSON.parse(window.localStorage.getItem('chapitres'));
-			// ATTENTION ?
-			chapitres={...chapitres,...structuredClone(_chapitres)};// on récupère les nouveaux chapitres éventuels ?
-		 } else {
-		 	chapitres=structuredClone(_chapitres);
-		 	
-		}
+			chapitres= {...chapitres,...JSON.parse(window.localStorage.getItem('chapitres'))};
+		 }
 		
 
 	} else{
 		console.log("localStorage n'est pas supporté");
-		//Mais l'appli marche quand même ! Il suffit de ne pas quiter l'onglet, a priori
 	}
 
 	for(id in chapitres){
@@ -734,6 +798,7 @@ function demarrage(){
 		user.avatar=avatarURL;
 		sauvegarder();
 	}, false);
+
 
 	// s'il y a une image d'avatar dans le storage, on l'affiche
 	if(user.avatar!=""){
@@ -786,40 +851,7 @@ const setFont = (f)=>{
 }
 
 
-// - - - - - - - - -
 
-// on pourrait charger ça en async dans le index.html, mais alors on ne serait pas sûr que ça arrive après les autres
-// or ça a besoin des autres fonctions.
-
-
-
-window.addEventListener('load',()=>{
-	// pas besoin de faire ceci avant ? 
-	// coup de pocker, il faudra que ça soit loadé avant qu'on affiche les autres catégories...
-	// mais sinon ça délaye le load pour rien. Est-ce très grave ?
-	// sinon, inliner dans une balise script avec defer ? mais ce n'est pas possible
-	document.head.insertAdjacentHTML('beforeend',`
-		<style>
-		@font-face { 
-			  font-family: "Nunito";
-			  font-weight: 900 ;
-			  font-style: normal;
-			  font-display: swap;
-			  src: url("assets/nunito-v16-latin-900.woff2");
-			 }
-			</style>`);
-	// on met également le preload
-	// sinon, comme il n'y a rien en gras dans la page, rien ne se passe 
-	// et la police ne sera pas prête lorsqu'on ira sur les autres vues
-	document.head.insertAdjacentHTML('beforeend',`<link rel="preload" as="font" crossorigin href="assets/nunito-v16-latin-900.woff2" type="font/woff2">`)
-
-
-	// - - - COMPTEUR - - - - - 
-	// pas besoin de retour ?
-	// fetch('http://damienmegy.xyz/php/vf/vf_compteur.php'); 
-
-
-});
 
 
 
@@ -1035,4 +1067,30 @@ function htmlPoints(){
 
 
 
-demarrage();
+// - - - - - -  O N L O A D - - - - - - - - - 
+
+window.addEventListener('load',()=>{
+	if(isSessionStorageEnabled()){
+		if (window.sessionStorage.getItem("foo") !== null) {
+			sessionEnCours=true;
+		}
+	}
+	
+	// - - - COMPTEUR - - - - - 
+	// pas besoin de retour ?
+	if(!sessionEnCours){
+		console.log("pas de session en cours");
+		fetch('https://damienmegy.xyz/php/quiz/compteur.php')
+			.then((response) => response.text())
+  		.then((data) => console.log(data));
+	}
+
+	if(isSessionStorageEnabled()){
+		window.sessionStorage.setItem("foo","bar")
+	}
+
+
+});
+
+
+demarrage(); // le script est en defer donc ceci arrive juste avant le DOMContentLoaded en théorie, après les autres scripts genre composants.js

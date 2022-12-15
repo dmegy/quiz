@@ -1,3 +1,42 @@
+bug : barres de progression des boutons verts, même dans une session
+au redémarrage de session, les stats de thème ont disparu : elles sont écrasées au chargement des questions et des chapitres ?
+
+
+
+
+TODO : inliner le css des composants dans les composants eux-mêmes (bonne pratique)
+Ne pas faire compliqué en créant un élément style et en append à head, mettre le style dans les balises, surtout lorsqu'il n'est utilisé que là...
+
+
+
+
+POURQUOI LE SPINNER A T IL DISPARU ????
+On en le voit plus en GPRS ???
+
+
+
+
+système de compteur, avec session sessionstorage
+
+commencer par refaire un fichier php avec un nouveau dossier pour /quiz/ 
+
+Ensuite faire un php pour l'envoi de données au serveur.
+
+
+regrouper les chapitres : au début sans calcul littéral, pus avec, au lieu de grouper par thèmes  fractions, racines carrées etc
+
+mode multijoueur avec la librairie de mozilla ? ca marche ? Non, togetherJS ne marche plus on dirait ! essayer autre chose mais pas prioritaire
+
+
+accessibilité sur très petits ecrans, genre sur le Nokia : 
+changer le style du h2 pour ces écrans, plus particulièrement les marges et padding, 
+
+avec un media-query et un clamp ?
+actuellement les marges sont calculées en rem, qui est un clamp 10 <-> 16 px, là il faudra donc mettre un media-query supplémentaire avec un clamp entre qq chose genre 16px, et la vraie valeur en rem ?
+
+
+
+
 Commencer à faire la page crédits
 
 commencer à essayer d'intégrer les qcms exo7

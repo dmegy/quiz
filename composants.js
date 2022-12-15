@@ -6,9 +6,6 @@
 // à la fin du fichier, des fonction qui ne sont pas des composants mais qui modifient le DOM
 
 
-
-
-
 /* ATTENTION préciser si fa regular ou fa solid ! (Fas ou Far)*/
 /* fa solid se prête bien au dark mode et aux fontes grasses*/
 
@@ -46,8 +43,8 @@ var svgPathFarCircleCheck = `<path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2
 
 
 
-var svgPathFasUserLarge		= `<path d="M224 0c70.7 0 128 57.3 128 128s-57.3 128-128 128s-128-57.3-128-128S153.3 0 224 0zM209.1 359.2l-18.6-31c-6.4-10.7 1.3-24.2 13.7-24.2H224h19.7c12.4 0 20.1 13.6 13.7 24.2l-18.6 31 33.4 123.9 39.5-161.2c77.2 12 136.3 78.8 136.3 159.4c0 17-13.8 30.7-30.7 30.7H265.1 182.9 30.7C13.8 512 0 498.2 0 481.3c0-80.6 59.1-147.4 136.3-159.4l39.5 161.2 33.4-123.9z"/>`;
-var svgPathFasUserTie			= `<path d="M224 0c70.7 0 128 57.3 128 128s-57.3 128-128 128s-128-57.3-128-128S153.3 0 224 0zM209.1 359.2l-18.6-31c-6.4-10.7 1.3-24.2 13.7-24.2H224h19.7c12.4 0 20.1 13.6 13.7 24.2l-18.6 31 33.4 123.9 39.5-161.2c77.2 12 136.3 78.8 136.3 159.4c0 17-13.8 30.7-30.7 30.7H265.1 182.9 30.7C13.8 512 0 498.2 0 481.3c0-80.6 59.1-147.4 136.3-159.4l39.5 161.2 33.4-123.9z"/>`;
+var svgPathFasUserLarge		= `<path d="M256 288c79.5 0 144-64.5 144-144S335.5 0 256 0S112 64.5 112 144s64.5 144 144 144zm-94.7 32C72.2 320 0 392.2 0 481.3c0 17 13.8 30.7 30.7 30.7H481.3c17 0 30.7-13.8 30.7-30.7C512 392.2 439.8 320 350.7 320H161.3z"/>`;
+var svgPathFasUserTie		= `<path d="M224 0c70.7 0 128 57.3 128 128s-57.3 128-128 128s-128-57.3-128-128S153.3 0 224 0zM209.1 359.2l-18.6-31c-6.4-10.7 1.3-24.2 13.7-24.2H224h19.7c12.4 0 20.1 13.6 13.7 24.2l-18.6 31 33.4 123.9 39.5-161.2c77.2 12 136.3 78.8 136.3 159.4c0 17-13.8 30.7-30.7 30.7H265.1 182.9 30.7C13.8 512 0 498.2 0 481.3c0-80.6 59.1-147.4 136.3-159.4l39.5 161.2 33.4-123.9z"/>`;
 var svgPathFasBookOpenReader	= `<path d="M352 96c0 53-43 96-96 96s-96-43-96-96s43-96 96-96s96 43 96 96zM240 248V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>`;
 var svgPathFasUserGraduate	= `<path d="M219.3 .5c3.1-.6 6.3-.6 9.4 0l200 40C439.9 42.7 448 52.6 448 64s-8.1 21.3-19.3 23.5L352 102.9V160c0 70.7-57.3 128-128 128s-128-57.3-128-128V102.9L48 93.3v65.1l15.7 78.4c.9 4.7-.3 9.6-3.3 13.3s-7.6 5.9-12.4 5.9H16c-4.8 0-9.3-2.1-12.4-5.9s-4.3-8.6-3.3-13.3L16 158.4V86.6C6.5 83.3 0 74.3 0 64C0 52.6 8.1 42.7 19.3 40.5l200-40zM129.1 323.2l83.2 88.4c6.3 6.7 17 6.7 23.3 0l83.2-88.4c73.7 14.9 129.1 80 129.1 158.1c0 17-13.8 30.7-30.7 30.7H30.7C13.8 512 0 498.2 0 481.3c0-78.1 55.5-143.2 129.1-158.1z"/>`;
 var svgPathFasRobot			= `<path d="M320 0c17.7 0 32 14.3 32 32V96H480c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H160c-35.3 0-64-28.7-64-64V160c0-35.3 28.7-64 64-64H288V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H208zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H304zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H400zM264 256c0-22.1-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40s40-17.9 40-40zm152 40c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40zM48 224H64V416H48c-26.5 0-48-21.5-48-48V272c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H576V224h16z"/>`;
@@ -68,8 +65,30 @@ function htmlStatsChapitre(idChap){
 }
 
 function htmlBoutonTheme(id){
+	/* - - - S T Y L E S - - - */
+	const sourceCSS=`
+		.bouton-theme-progress{
+			background:var(--c-secondaire-accent);
+			position:absolute;
+			top:0;
+			left:0;
+			height:100%;
+			width: calc( var(--progression,0) * 1%);
+		}
+		.bouton-theme-texte{
+			position:relative;
+		}`;
+	// on devrait mettre la classe bouton-petit ici...
+	const style=document.createElement('style');
+	style.textContent=sourceCSS;
+	document.head.append(style);
+
 	let s=`
-		<div style="--progression:0;" class="bouton-petit bouton-coul-secondaire" id="boutonTheme_${id}" onclick="afficherInfoTheme('${id}')">
+		<div 
+			style="--progression:0;" 
+			class="bouton-petit bouton-coul-secondaire" 
+			id="boutonTheme_${id}" 
+			onclick="afficherInfoTheme('${id}')">
 			<div class="bouton-theme-progress" style="opacity:70%"></div>
 			<div class="bouton-theme-texte">${themes[id].etiquette}</div>
 		</div>
@@ -77,6 +96,33 @@ function htmlBoutonTheme(id){
 	return s;
 }
 
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - 
+ - - - - - B A R R E S   D E  P R O G R E S S I O N
+ - - - - - - - - - - - - - - - - - - - - - - - - -- - -*/
+
+/* style des barres de progression, soit triple barre soit bare simple */
+( ()=>{
+	const sourceCSS=`
+		.barre-conteneur{
+			background-color: var(--c-moins-sombre);
+			width: 100%; /* de son contenant */
+			overflow: hidden;
+			height: 100%; /* de son contenant*/
+			padding: 0;
+			margin: 0;
+			border-radius: 1rem;
+			display: flex;
+		}
+		.barre{
+			height: 100%;
+		}
+	`;
+	const style=document.createElement('style');
+	style.textContent=sourceCSS;
+	document.head.append(style);
+})();
 
 
 
@@ -110,6 +156,12 @@ function htmlBarre(a,b){
 }
 
 
+
+
+
+
+
+
 function htmlIconeResultat(r){
 	// utilisé pour la correction des questions
 	// r est le résultat à une question -1, 0 ou 1
@@ -124,8 +176,6 @@ function htmlIconeResultat(r){
 	s+=`</svg>`;
 	return s;
 }
-
-
 
 function htmlIconeNote(note){
 	// écran de fin de quiz
@@ -145,7 +195,15 @@ function htmlTrophee(trophee){
 	let date=new Date(trophee.date);
 	let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 	let s=`
-		<div class="trophee">
+		<div style="
+		margin: 1rem;
+		padding:.5rem 1rem;
+		border-radius: 1rem;
+		background-color: var(--c-bg-header);
+		display:flex;
+		gap: .5rem;
+		align-items: center;
+		">
 			<div style="font-size:2.5rem;margin:.5rem">
 				<svg class="svg-icone svg-strong-glow" viewBox="0 0 600 512">${globalThis['svgPath'+trophee.icone]}</svg>
 
@@ -164,18 +222,57 @@ function htmlTrophee(trophee){
 function htmlProfil(){
 	// on utilise la classe "trophée" ? Faire une autre classe
 	let s=`
-		<div style="flex-grow:1;padding:0 1rem">
-			Bilan : 
-			${historique.questionsVues.length} questions vues dont : <br> 
+		<div style="flex-grow:1;padding:0 1rem;margin-top:.2rem">
+			<div style="display:flex;justify-content:space-between">
+				<div>Pseudo : </div>
+				<div>
+					<input style="display:inline" type="text" id="inputPseudo" name="inputPseudoName" size="10" maxlength="10" value="${user.pseudo}">
+				</div>
+			</div>
+			<div style="display:flex;justify-content:space-between">
+				<div>Établissement : </div>
+				<div>
+					<select name="inputEtablissementName" id="inputEtablissement">
+						<option value="Aucun">Aucun</option>
+						<option value="FST Nancy">FST Nancy</option>
+						<option value="Callot">Callot</option>
+						<option value="Chopin">Chopin</option>
+						<option value="JDA">JDA</option>
+						<option value="Loritz">Loritz</option>
+						<option value="Poinca">Poinca</option>
+						<option value="Sigis">Sigis</option>
+					</select>
+				</div>
+			</div>
+			<div style="display:flex;justify-content:space-between">
+				<div>Club : </div>
+				<div>
+					<select name="inputClubName" id="inputClub">
+						<option value="Aucun">Aucun</option>
+						<option value="Lyon">Lyon</option>
+						<option value="Marseille">Marseille</option>
+						<option value="Nancy">Nancy</option>
+						<option value="Paris">Paris</option>
+						<option value="Strasbourg">Strasbourg</option>
+						<option value="Toulouse">Toulouse</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		`;
+	return s;
+}
+
+function htmlProfilStats(){
+	let s=`<div style="padding:.2rem 1rem">
+			Bilan : ${historique.questionsVues.length} questions vues dont :<br>
 			<span class="danger">${user.repFausses} ratées</span>, 
 			<span class="warning">${user.repNeutres} sautées</span>, 
 			<span class="success">${user.repJustes} réussies</span>.
-			<div style="width:100%;height:.5rem">${htmlTripleBarre([user.repFausses,user.repNeutres,user.repJustes])}</div>
-			<!--<div class="margin-l-r">
-			${user.combo} rép. correctes d'affilée (${user.combo*(user.combo+1)/2} pts cumulés).
-			</div>-->
-		</div>
-		`;
+			</div>
+			<div style="margin:0 1rem; width:calc(100% - 2rem);height:.5rem">${htmlTripleBarre([user.repFausses,user.repNeutres,user.repJustes])}</div>
+			<!--${user.combo} réponses correctes d'affilée (${user.combo*(user.combo+1)/2} pts cumulés).-->
+			`;
 	return s;
 }
 
@@ -243,8 +340,44 @@ function htmlQuetesLongues(){
 }
 
 function htmlGraphiques(){
-	//ca serai bien de mettre 48h au lieu de 24h...
-	// 24h pour commencer, avec les points
+	/* le style du composant : */
+	const sourceCSS=`
+		.histogramme{
+			background-color:var(--c-bg);
+			width:100%;
+			height:3rem;
+			display:flex;
+			gap: 1px;
+			align-items: stretch;
+			flex-direction: row-reverse;
+		}
+		.histogramme-colonne{
+			flex:1;
+			display:flex;
+			flex-direction: column-reverse;
+		  align-items: stretch; 
+		}
+		.histogramme-colonne-reverse{
+			flex:1;
+			display:flex;
+			flex-direction: column;
+		  align-items: stretch;
+		  /*justify-content: flex-end;
+		}
+		.histogramme-barre{
+			background-color:var(--c-primaire);
+			border: 1px var(--c-primaire) solid;
+		}
+		.histogramme-legende{
+			width: 100%;
+			text-align: center;
+			margin-top: .2rem;
+		}
+	`;
+	const style=document.createElement('style');
+	style.textContent = sourceCSS;
+	document.head.append(style);
+	/* - - --  fin style - - - */
 	let s=`<div class="histogramme">`;
 	let max=0;
 	let indexMax=0;

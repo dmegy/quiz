@@ -16,19 +16,86 @@ var svgPathFasChampagneGlasses	= `<path d="M320 128V49.1L186.6 .3c-11.4-4.2-24 .
 
 // COMPOSANTS:
 
+
+/* - - - - - S T Y L E S - - - - - */
+// style pour le composant 'question':
+(()=>{
+	const sourceCSS=`
+		.question{
+			flex-grow: 1;
+			overflow: auto;
+			scrollbar-width: none;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			font-size: 1rem;
+			padding-top: 2rem;
+		}
+		.bouton-conteneur input {
+		  position: absolute;
+		  opacity: 0;
+		  cursor: pointer;
+		}
+
+		.bouton-conteneur input:checked ~ .bouton {
+		  /*background-color: #2196F3;*/
+		  border: 1px solid var(--c-accent);
+		  box-shadow: 0 0 8px 0 var(--c-primaire), inset 0 0 5px 0 var(--c-primaire);
+
+		  transition: box-shadow cubic-bezier(0,2,1,1) 200ms
+		}
+		.bouton-dark{
+			border: 1px grey solid;
+			margin-top:.5rem;
+			margin-bottom:.5rem;
+		}
+		.question-corrigee{
+			border-radius:2rem;
+			padding : 1rem;
+			margin:.5rem 1rem;
+		}
+		.question-corrigee-success{
+			background-color: hsl(var(--hue-success) 80% 40% / 20%);
+		}
+		.question-corrigee-warning{
+			background-color: hsl(var(--hue-warning) 80% 50% / 30%);
+		}
+		.question-corrigee-danger{
+			background-color: hsl(var(--hue-danger) 80% 30% / 30%);
+		}
+
+	`;
+	const style=document.createElement('style');
+	style.textContent=sourceCSS;
+	document.head.append(style);
+})();
+
+	/* - - - F I N   S T Y L E S - - - */
+
+
+
 function htmlQuestion(n){
 	// entrée : le numéro absolu de la question (pas l'objet 'question' lui-même!), 
-	//sortie : un div display:none avec l'énoncé et les réponses possibles
+	// sortie : un div display:none avec l'énoncé et les réponses possibles
+	
+
+	
+
 	let s=`<div class="question full-height" id="question-${n}" style="display:none">
 				<p class="question-enonce">${questions[n].texte}</p>
-				<div class="question-choix">
-				<form>`;
+				<div class="question-choix"><form>`;
 	for(let i=0;i<questions[n].reponses.length;i++){
-		s+=			`<label id='label-question-${n}-choix-${i}' class='bouton-conteneur'><input type='radio' name='q' id='question-${n}-choix-${i}' autocomplete='off'><div id='bouton-question-${n}-choix-${i}' class='bouton bouton-dark'>${questions[n].reponses[i].texte}</div></label>`;
+		s+=			`<label  id='label-question-${n}-choix-${i}' class='bouton-conteneur'>
+						<input type='radio' name='q' id='question-${n}-choix-${i}' autocomplete='off'>
+						<div id='bouton-question-${n}-choix-${i}' class='bouton bouton-dark'>${questions[n].reponses[i].texte}</div>
+					</label>`;
 	}
-	s+=				`<label id='label-question-${n}-choix--1' class='bouton-conteneur'><input type='radio' name='q' id='question-${n}-choix--1' autocomplete='off'><div id='bouton-question-${n}-choix--1' class='bouton bouton-dark'>Je ne sais pas</div></label>
-				</form>
-				</div>
+	s+=				`<label id='label-question-${n}-choix--1' class='bouton-conteneur'>
+						<input type='radio' name='q' id='question-${n}-choix--1' autocomplete='off'>
+						<div id='bouton-question-${n}-choix--1' class='bouton bouton-dark'>
+						Je ne sais pas</div>
+					</label>
+				</form></div>
 			</div>`;
 	return s;
 }
@@ -50,7 +117,7 @@ function afficherChaine(html=""){
 	let contenu=document.getElementById('message-contenu');
 	contenu.replaceChildren(); // on vide le div de contenu
 	contenu.innerHTML+=html;
-	contenu.innerHTML+=`<button class='bouton bouton-conteneur bouton-coul large' onclick='cacherMessage()'>Fermer</button>`;
+	contenu.innerHTML+=`<div class='bouton bouton-conteneur bouton-coul-secondaire' onclick='cacherMessage()'>Fermer</div>`;
 	// on rend visible :
 	document.getElementById('message').style.display="block";
 }
@@ -67,7 +134,7 @@ function afficherMessage(message){
 			<p>${message.texte}</p>
 		`;
 	contenu.innerHTML+=s;
-	contenu.innerHTML+=`<button class='bouton bouton-conteneur bouton-coul large' onclick='cacherMessage()'>Fermer</button>`;
+	contenu.innerHTML+=`<div class='bouton bouton-conteneur bouton-coul-secondaire' onclick='cacherMessage()'>Fermer</div>`;
 	// on rend visible :
 	document.getElementById('message').style.display="block";
 }
@@ -91,7 +158,7 @@ function depilerMessage(but="themes"){ // attention ceci affecte l'objet global 
 					<p>${message.texte}</p>
 		`;
 	contenu.innerHTML+=s;
-	contenu.innerHTML+=`<button class="bouton bouton-conteneur bouton-coul large" onclick="depiler('${but}')">Fermer</button>`;
+	contenu.innerHTML+=`<div class="bouton bouton-conteneur bouton-coul-secondaire" onclick="depiler('${but}')">Fermer</div>`;
 	// on rend visible :
 	document.getElementById('message').style.display="block";
 }
