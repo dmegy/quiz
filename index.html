@@ -27,8 +27,8 @@
   	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
 
 
-  	<!-- ceci fait ramer alors que ça devrait pas ! -->
-		<!--<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2020"></script>-->
+  	<!-- ceci fait ramer alors que ça devrait pas ! et ça fait une erreur aussi ?? -->
+		<!-- <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2018"></script>-->
 		<script type="text/javascript" defer src="composants.js"></script>
 		<script type="text/javascript" defer src="themes.js"></script>
 		<script type="text/javascript" defer src="questions.js"></script>
@@ -40,6 +40,8 @@
   	<style>
 
   		/*  - - - - - S T Y L E S   C R T I Q U E S - - - - - - -*/
+  		::-webkit-scrollbar {display: none;}
+
   		/* pour le loader */
 			@keyframes pulse{
 				10%{
@@ -190,7 +192,7 @@
 			html::after{
 				content:none;
 			}
-
+			/* le ExtraBold, ça presse moins donc pas inliné */
 			@font-face { 
 				  font-family: "Nunito";
 				  font-weight: 900 ;
@@ -207,12 +209,13 @@
 
 			body{
 				font-family:Nunito,Futura,Arial;
-				background-color:hsl(208 40% 9%); /* temporaire, style critique */
+				background-color: var(--c-bg); /* temporaire, style critique */
 				width: 100%;
 				height: 100%;
 				padding: 0;
 				margin: 0;
 				scrollbar-width: none;
+				-ms-overflow-style: none;
 				overflow: hidden;
 				display: flex;
 				flex-direction: column;
@@ -231,15 +234,15 @@
 			}
 
   		h2faux{
-  			display:inline-block;
+  			display:block;
   			font-size: 2.6rem;
   			--gras:calc(1em/50);
-  			transform:scaleX(1.05);
+  			/*transform:scaleX(1.05);*/
   			letter-spacing: 0;
   			text-shadow:calc(-1*var(--gras)) calc(-1*var(--gras)) 0 var(--c-texte),calc(-1*var(--gras)) 0px 0 var(--c-texte),calc(-1*var(--gras)) var(--gras) 0 var(--c-texte),0px var(--gras) 0 var(--c-texte),var(--gras) var(--gras) 0 var(--c-texte),var(--gras) 0px 0 var(--c-texte),var(--gras) calc(-1*var(--gras)) 0 var(--c-texte),0px calc(-1*var(--gras)) 0 var(--c-texte),0 0 .75em var(--c-accent),0 0 .1em var(--c-accent);
   			/*text-shadow: 0 0 .5em var(--c-accent);*/
-  			margin: .7rem 1rem;
-  			padding: 1rem;
+  			/*padding: 1rem;*/
+  			margin: .6em 0 0.6em 1rem;
   		}
 			h3faux{
 				--c-texte:var(--c-secondaire-accent-fort);
@@ -281,10 +284,11 @@
 				margin: 0;
 				padding: 0;
 				flex-grow: 1;
-				overflow: auto;
+				overflow-x:hidden;
+				overflow-y: auto;
 				scrollbar-width: none;
 			}
-			h1,h2,h3,h4{margin: .8em 0 0.8em 1rem;}
+			h1,h2,h3,h4{margin: .6em 0 0.6em 1rem;}
 			h3{color:var(--c-secondaire-accent);}
 			h1,h2{text-shadow: 0 0 .5em var(--c-accent);}
 			h1{font-size: 3.2rem; font-weight:900}
@@ -709,7 +713,7 @@
   </head>
 
 
-  <body bgcolor="#0e1820">
+  <body>
 
 	<header>
 
@@ -749,10 +753,10 @@
 		</div>
 
 		<div class="sync" data-action="toggle" data-param="(etat=='jeu')||(etat=='correction')" style="display:none;">
-			<div class="sync petit-message" data-action="toggle" data-param="(user.combo==1)">
+			<div style="font-size:1rem" class="sync petit-message" data-action="toggle" data-param="(user.combo==1)">
   			BRAVO !
   		</div>
-			<div class="sync petit-message" data-action="toggle" data-param="(user.combo>1)">
+			<div style="font-size:1rem" class="sync petit-message" data-action="toggle" data-param="(user.combo>1)">
   			<span class="sync" data-action="html" data-param="user.combo"></span> D'AFFILÉE !
   		</div>
 		</div>
@@ -799,35 +803,26 @@
 		<p>Cette appli de vrai/faux a été codée à la fois pour les étudiants de L1 de Nancy et pour les élèves du <a href="http://dmegy.perso.math.cnrs.fr/club" target="_blank">Club Mathématique de Nancy</a>.</p>
 
 		<h3faux class="gras">
-			<svg class="svg-icone fill-secondaire-accent"   viewBox="0 0 512 512"><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg>
+			
 			 Règles du jeu
 		</h3faux>
 
 		<p>Chaque réponse correcte rapporte un point, chaque réponse incorrecte enlève un point.</p>
-		<p>Des bonus (importants) sont souvent octroyés, par exemple pour des séries de bonnes réponses consécutives.</p>
+		<p>Des bonus sont octroyés pour des séries de bonnes réponses consécutives.</p>
 		
 
-		<!--<h4><i class="fa fa-trophy"></i>  Highscores</h4>
-		
-		<p>Le record actuel est de <span id="record"><i class="fa fa-spinner fa-spin"></i></span> points !</p>-->
-
-		<h3faux class="gras">
-			<svg class="svg-icone fill-secondaire-accent"   viewBox="0 0 512 512"><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg>
-			 Utilisation
-		</h3faux>
-		<p>
-			La navigation se fait au moyen des quatre icônes en haut de l'écran.
-			Pour afficher les thèmes et choisir un quiz, clique sur la seconde icône ou bien sur le bouton suivant :
-		</p>
 		<div onclick="afficherThemes()" id="boutonAfficherThemes" class="inerte bouton bouton-coul-primaire" >
 			<svg  class="menu svg-icone" viewBox="0 0 512 512"><path d="M64 144c26.5 0 48-21.5 48-48s-21.5-48-48-48S16 69.5 16 96s21.5 48 48 48zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm48-208c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48z"/></svg>
 		 	Choisir un quiz
 		</div>
 		
+		<h3faux class="gras">
+			 Highscores
+		</h3faux>
+		<div id="highscores"></div>
 		
 		
 	</div> <!-- - - - - / A C C U E I L - - - - - -->
-
 
 
 	<!-- - - - - - C H O I X   D E S   T H E M E S - - - - - -->
@@ -1242,10 +1237,6 @@
 	</div>
 	</div>
 
-
-
-
-	
 
 
 	

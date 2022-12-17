@@ -348,7 +348,10 @@ function corrigerQuestion(){
 
 
 	quiz.points+= question.resultat;// points, c'est juste les points gagnés à la régulière
-	quiz.bonus+=Math.max(user.combo-1,0); // bonus de combo, décalé de un et max pour éviter d'enlever un pt si la question est passée
+
+	quiz.bonus+=Math.min(Math.max(user.combo-1,0),50); // bonus de combo, décalé de un et max pour éviter d'enlever un pt si la question est passée
+
+	// on tronque car trop gras à la fin
 
 	quiz.total=quiz.points+quiz.bonus; // pour l'affichage en haut à droite
 
@@ -493,7 +496,7 @@ function fin(){ // Calcul des bonus de fin et affichage des stats de fin :
 	themes[quiz.id].points+=quiz.total; // pts gagnés sur ce thème, pour les stats du thème
 	
 	
-	envoyerStatsServeur(); // ici suivant ce que répond le serveur (?) il faudrait rajouter des messages, genre record battu etc
+	envoyerStatsServeur(); // ne fait rien pour l'instant
 	
 	sauvegarder(); // on met tout dans le localStorage
 
@@ -556,6 +559,7 @@ function octroyerCadeau(){
 			};
 			messages.push(m);
 			quiz.total+=cadeau; // évite de rappeler une deuxième fois la fonction ajouter, et de regénerer des messages de seuil
+			historique.pointsGagnes.unshift({"date": new Date(), "points":cadeau, "theme": "cadeau"} );
 	}
 }
 
@@ -638,21 +642,32 @@ function octroyerBooster(){
 
 
 function envoyerStatsServeur(){
+	let total=0;
+	// vérification _très_ sommaire, apparemment inutile, les points ont déjà été recorrigés ?
+	for(let i=0;i<historique.pointsGagnes.length;i++){
+		total+=historique.pointsGagnes[i].points;
+	}
+	if(total==user.points){
+		$.ajax({
+			method: 'post',
+			url: 'https://damienmegy.xyz/php/quiz/stats.php',
+			data: {
+			  'user' : JSON.stringify(user),
+			  'historique' : JSON.stringify(historique)
+			}
+		});
+		console.log("Points envoyés");
+	}else{
+		console.log("Points non envoyés");
+	}
+	
 
-	// envoi des stats au php qui se charge d'updater le record si applicable
-	// afficher un message si record battu, aussi .
-	// utiliser 'fetch', maintenant
-	/*$.ajax({
-		method: 'post',
-		url: 'http://damienmegy.xyz/php/vf/vf_score.php',
-		data: {
-		  'theme' : t.nom,
-		  'heritage' : heritage,
-		  'record' : record,
-		  'stats' : JSON.stringify(stats),
-		  'bonus' : JSON.stringify(bonus)
-		}
-	});*/
+	/* renvoie une erreur !
+	** CORS? l'ancienne version marchait, 
+	** comprendre ce qui ne marche plus !! 
+	** de toute façon on s'en fout pour l'instant
+	*/
+
 }
 
 

@@ -21,6 +21,14 @@
 // - - - - - - V A R I A B L E S - - - - - - - - 
 
 
+// pour les highscores
+let evenements=[];
+let scoresMax={};
+let highscores=[];
+// / pour les highscores
+
+
+
 let premiereVue=true;
 let sessionEnCours=false;
 
@@ -61,6 +69,8 @@ let user={
 	"avatar":"", /* type : dataURL*/
 	"affiliationEtablissement":"",
 	"affiliationClub":"",
+	"departement":"",
+	"codePostal":"",
 	"points":0,
 	"pointsAujourdhui":0,
 	"points24h":0,
@@ -163,7 +173,7 @@ let record=0; // record de points enregistré sur le serveur. Récupéré dans u
 
 
 // - - - - - - - - -
-// - - -  LOCALSTORAGE
+// - - -  LOCALSTORAGE et SESSIONSTORAGE
 
 const isLocalStorageEnabled = () => {
   try {
@@ -201,11 +211,9 @@ const clone= (obj)=> {
 
 
 function sauvegarder(){
-	console.log("sauvegarde");
+	console.log("sauvegarde-> localStorage");
 	// enregistrement des résultats en local :
 	if (typeof(Storage) !== "undefined") {
-		console.log("progression quadrilatères : "+themes["quadrilateres"].progression);
-
 		window.localStorage.setItem('questions',JSON.stringify(questions));
 		window.localStorage.setItem('themes',JSON.stringify(themes));
 		window.localStorage.setItem('chapitres',JSON.stringify(chapitres));
@@ -216,7 +224,59 @@ function sauvegarder(){
 
 
 
+function recupererDonneesLocales(){
+	// va chercher les données dans le stockage local et les met dans l'appli.
 
+	// encapsulation ds une fonction pour rendre le choix d'API transparent
+	//
+	// actuellement ça marche avec localstorage pour raisons historiques
+	// TODO : 
+	// passer à indexedDB, avec ou sans l'API idb 
+
+
+
+
+
+	if(isLocalStorageEnabled()) { // si localStorage est supporté :
+		console.log("local storage supporté : on récupère les données locales");
+		// inutile ?
+		if (window.localStorage.getItem("points") !== null) 
+		  points=parseInt(window.localStorage.getItem('points'),10);
+
+
+
+		if (window.localStorage.getItem("historique") !== null) 
+		  historique= JSON.parse(window.localStorage.getItem('historique'));
+
+		if (window.localStorage.getItem("user") !== null) 
+		  user= {...user,...JSON.parse(window.localStorage.getItem('user'))};
+
+
+
+		
+		// maintenant on rajoute ce qu'il y avait dans le storage, qui écrase ce qui précède
+		if (window.localStorage.getItem("questions") !== null){
+			// les questions dans le storage écrasent les autres, mais il pouvait y en avoir de nouvelles dans questions.js
+			let questionsStockees = JSON.parse(window.localStorage.getItem('questions'));
+			for (let i = 0 ; i < questionsStockees.length;i++){
+				questions[i]= structuredClone(questionsStockees[i]);
+			}
+		 }
+
+
+		if (window.localStorage.getItem("themes") !== null){
+			themes= {...chapitres, ...JSON.parse(window.localStorage.getItem('themes'))};
+		 } 
+
+		 if (window.localStorage.getItem("chapitres") !== null){
+			chapitres= {...chapitres,...JSON.parse(window.localStorage.getItem('chapitres'))};
+		 }
+	} else{
+		console.log("localStorage n'est pas supporté");
+	}
+	// - - - - - - - - - - - 
+	// FIN fonction recupererDonneesLocales()
+}
 
 
 
@@ -366,7 +426,8 @@ function activiteRecente(){
 	}
 
 	return a;
-
+	// - - - - - - - - - - - - - - -
+	// FIN fonction activiteRecente()
 }
 
 
@@ -378,7 +439,11 @@ function scroll(){
 	document.getElementsByTagName('body')[0].style.overflow='';
 }
 
+
 function afficherTrophees(){
+	//
+	// - - - -  attention, modifie le DOM
+	//
 	let e=document.getElementById("listeTrophees");
 	e.innerHTML=""; //  on vide : vider à chaque fois ?? bof
 	if(user.trophees.length==0)
@@ -387,6 +452,8 @@ function afficherTrophees(){
 		e.innerHTML = htmlTrophee(user.trophees[i])+e.innerHTML; // on affiche en haut de la liste
 	}
 	goto("trophees");
+	// - - - - - - - - - - - - - --
+	// FIN fonction afficherTrophees()
 }
 
 
@@ -403,6 +470,8 @@ function afficherThemes(){
 	// on vide tout :
 	document.getElementById("themes").replaceChildren();
 
+
+	// écriture des chapitres, puis dedans, écriture des thèmes du chapitre 
 	for (let idChap in chapitres){
 		let nomDuChapitre=chapitres[idChap].nom;
 		let themesDuChapitre=chapitres[idChap].themes;
@@ -430,6 +499,7 @@ function afficherThemes(){
 
 		}
 	}
+	// texte de fin
 	document.getElementById("themes").insertAdjacentHTML("beforeend",`
 		<p>Les chapitres de niveau bac+1 sont encore expérimentaux : ils sont parfois très courts, et il peut y avoir des erreurs de mise en forme LaTeX sur les derniers.</p>
 		<p>À moyen-terme, cette base de données (pour l'instant personnelle) va fusionner avec plusieurs autres bases, en particulier la base de QCMs du site exo7 et plusieurs centaines de nouvelles questions apparaitront ici (vrai-faux ou QCMs). Les questions seront accessibles via le compte github d'exo7, et un export sera disponible aux formats AMC et Moodle. Tout ceci est en préparation !</p>
@@ -443,6 +513,8 @@ function afficherThemes(){
 
 
 	goto('themes');
+	// - - - - - - - -
+	// FIN fonction afficherThemes()
 }
 
 
@@ -454,6 +526,9 @@ function calculerStatsTheme(id){
 	// fonction lancée lors de l'affichage de la liste des thèmes
 	// et non pas seulement lors de la complétion d'un quiz 
 	// car on a pu commence un quiz et réussir des questions
+
+	console.log(`calculerStatsTheme(${id})`);
+
 	let t=themes[id]; // pointeur
 
 	t.nbQuestionsVues=0;
@@ -471,13 +546,14 @@ function calculerStatsTheme(id){
 	t.progression 					= Math.floor(100*t.nbQuestionsReussies/t.nbQuestions);
 	t.progressionConsolidee = Math.floor(100*t.nbQuestionsConsolidees/t.nbQuestions);
 
-	
+	// - - - - - - - -
+	// FIN fonction calculerStatsThemes()
 }
 
 
 
 function afficherInfoTheme(id){ // lorsqu'on clique sur un thème :
-	console.log("afficherInfoTheme de "+id);
+	console.log(`afficherInfoTheme(${id})`);
 	calculerStatsTheme(id);
 	let t=themes[id];// pointeur
 	theme = structuredClone(t); // theme courant : on pourrait remplacer par juste l'id courant
@@ -516,11 +592,17 @@ function afficherInfoTheme(id){ // lorsqu'on clique sur un thème :
 // - - - -   A C T U A L I S A T I O N   A F F I C H A G E - - - - 
 
 function goto(e,refreshMathJax=true){
+	// entrée e:string nom de la variable d'état
+	// action: change la variable d'état,
+	// actualisation affichage via la fonction dédiée et aussi via d'autres actions sur le DOM...
+
+	console.log(`goto ${e}`)
 	// ne pas essayer de sauvegarder des le début, les champs input n'existent pas encore
 	if(!premiereVue){
 		user.pseudo = document.getElementById("inputPseudo").value;
 		user.affiliationClub=document.getElementById("inputClub").value;
-		user.affiliationEtablissement=document.getElementById("inputEtablissement").value;
+		//user.affiliationEtablissement=document.getElementById("inputEtablissement").value;
+		user.departement=document.getElementById("inputDepartement").value;
 		window.localStorage.setItem('user',JSON.stringify(user)); // on enregistre le pseudo etc tt de suite
 
 	}
@@ -532,9 +614,16 @@ function goto(e,refreshMathJax=true){
 	etatPrecedent=etat; // au cas où
 	etat=e; //on change d'état
 
+	// tableau highscores
+	if(e=="accueil"){
+		fetch("https://damienmegy.xyz/php/quiz/out/highscores.txt?v="+(new Date().getTime()))
+		.then((response) => response.text())
+  	.then((data)=>ecrireScores(data));
+	}
+
+
 	// aide visuelle en haut pour savoir où on est
 	// refaire, pas assez visible
-
 	if(e=="accueil" || e=="themes" || e=="user" || e=="trophees"){
 		document.querySelectorAll(".menu").forEach((el)=>{el.classList.remove('svg-superstrong-glow');});
 		document.getElementById("menu-"+e).classList.add("svg-superstrong-glow");
@@ -560,30 +649,10 @@ function goto(e,refreshMathJax=true){
 }
 
 
-/*function actualiserAffichage(selecteur="body"){ // l'angular du pauvre :
-	let t=new Date().getTime();
-	// le target dans lequel on va sync les machins. Par défaut c'est tout le document
-	let target=document.querySelector(selecteur);
-
-	target.querySelectorAll(".sync").forEach((el, i) => {
-		if(el.dataset.action=="toggle"){
-			el.style.display=eval(el.dataset.param);
-		}
-		else if (el.dataset.action=="html"){
-
-			let paramEvalue=eval(el.dataset.param);
-			//console.log("l'élément "+el+ " est visible, on tente de changer son innerHTML avec "+paramEvalue);
-			el.innerHTML=paramEvalue;
-		}
-		else {
-			console.log(`actualiserAffichage() : action ${el.dataset.action} non autorisée.`)
-		}
-	});
-	console.log("Page rendue en "+(new Date().getTime()-t)+" ms");
-}*/
 
 
 //les noms sont hérités de l'ancienne version
+// le nom toggle n'est peut-être pas optimal
 window.toggle = function (el,bool) { // attention c'est pas un vrai toggle, il y a bool
     el.style.display = bool ? '' : 'none';
 }
@@ -615,10 +684,17 @@ function actualiserAffichage(selecteur="body"){ // l'angular du pauvre :
     if (inputClub.options[i].text === user.affiliationClub)
       inputClub.options[i].selected = true;
   }
+  /*
   let inputEtablissement = document.getElementById("inputEtablissement");
   for (var i = 0; i < inputEtablissement.options.length; ++i) {
     if (inputEtablissement.options[i].text === user.affiliationEtablissement)
       inputEtablissement.options[i].selected = true;
+  }
+  */
+  let inputDepartement = document.getElementById("inputDepartement");
+  for (var i = 0; i < inputDepartement.options.length; ++i) {
+    if (inputDepartement.options[i].text === user.departement)
+      inputDepartement.options[i].selected = true;
   }
   //- - - - - - - --
 
@@ -679,6 +755,8 @@ dans ce cas, le window.onload n'arrive pas, mais ça ne bloque pas l'application
 
 function demarrage(){
 	console.log("Demarrage")
+	// on copie les données externes _questions, _themes et _chapitres dans de nouveaux objets, par sécurité
+	// inutile ?
 
 
 	questions=structuredClone(_questions);
@@ -704,51 +782,27 @@ function demarrage(){
 
 	chapitres=structuredClone(_chapitres);
 
+	//- - - - - - - - - - - 
 
+	// séparer getData et getData
 
-
-	if (isLocalStorageEnabled()) { // si localStorage est supporté :
-		if (window.localStorage.getItem("premiereConnexion") !== null) 
-			messageAccueil="Te revoilà !";
+	//-----------
+	if (isLocalStorageEnabled()) {
+		if (window.localStorage.getItem("premiereConnexion") !== null){
+		}
 		else
 			window.localStorage.setItem("premiereConnexion",JSON.stringify(new Date()));
-
-		console.log("local storage supporté");
-		if (window.localStorage.getItem("points") !== null) 
-		  points=parseInt(window.localStorage.getItem('points'),10);
-
-		if (window.localStorage.getItem("historique") !== null) 
-		  historique= JSON.parse(window.localStorage.getItem('historique'));
-
-		if (window.localStorage.getItem("user") !== null) 
-		  user= {...user,...JSON.parse(window.localStorage.getItem('user'))};
-
-
-
-		
-		// maintenant on rajoue ceu qu'il y avait dans le storage, qui écrase ce qui précède
-		if (window.localStorage.getItem("questions") !== null){
-			// les questions dans le storage écrasent les autres, mais il pouvait y en avoir de nouvelles dans questions.js
-			let questionsStockees = JSON.parse(window.localStorage.getItem('questions'));
-			for (let i = 0 ; i < questionsStockees.length;i++){
-				questions[i]= structuredClone(questionsStockees[i]);
-			}
-			
-		 }
-
-
-		if (window.localStorage.getItem("themes") !== null){
-			themes= {...chapitres, ...JSON.parse(window.localStorage.getItem('themes'))};
-		 } 
-
-		 if (window.localStorage.getItem("chapitres") !== null){
-			chapitres= {...chapitres,...JSON.parse(window.localStorage.getItem('chapitres'))};
-		 }
-		
-
-	} else{
-		console.log("localStorage n'est pas supporté");
 	}
+	//-----------
+
+
+
+
+	recupererDonneesLocales();
+
+
+
+
 
 	for(id in chapitres){
 			chapitres[id].points= chapitres[id].points || 0;
@@ -1039,7 +1093,11 @@ const capitaliser = (str) => { // met le première caractère d'une chaîne en c
 
 function iconeUser(pts){
 	let icone="";
-	if(pts>10000)
+	if(pts>20000)
+		icone="FasDragon";
+	else if(pts>15000)
+		icone="FasUserNinja";
+	else if(pts>10000)
 		icone="FasRobot";
 	else if(pts>5000)
 		icone="FasUserAstronaut";
@@ -1047,7 +1105,7 @@ function iconeUser(pts){
 		icone="FasUserGraduate";
 	else if(pts>500)
 		icone="FasBookOpenReader";
-	else if(pts>20)
+	else if(pts>50)
 		icone="FasUserTie";
 	else
 		icone="FasUserLarge";
@@ -1089,8 +1147,41 @@ window.addEventListener('load',()=>{
 		window.sessionStorage.setItem("foo","bar")
 	}
 
+	getScript("assets/jquery-2.1.3.min.js");
 
 });
+
+
+  	function ecrireScores(data){
+
+  		const rows = data.split("\n");
+
+  		for(let i=rows.length-2;i>=0;i--){
+  			// il y a un saut de ligne à la fin...
+  			evenements[i]=rows[i].split(";");
+
+  			scoresMax[ evenements[i][0] ] = 
+  			{
+  				"pseudo":evenements[i][1],
+  				"departement":evenements[i][2],
+  				"club":evenements[i][3],
+  				"points":evenements[i][4]
+  				};
+
+  			// ça écrase et les scores sont décroissants normalement...
+  		}
+
+			let joueurs = Object.keys(scoresMax);
+			for(let i=0; i<joueurs.length;i++){
+					highscores[i]={...{"userId":joueurs[i]},...scoresMax[joueurs[i]] };
+			}
+			highscores.sort(function(a, b){return b['points'] - a['points'] });
+			highscores=highscores.slice(0,20)
+			document.getElementById('highscores').innerHTML=htmlHighscores(highscores);
+  	}
+
+
+
 
 
 demarrage(); // le script est en defer donc ceci arrive juste avant le DOMContentLoaded en théorie, après les autres scripts genre composants.js

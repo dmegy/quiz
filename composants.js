@@ -49,12 +49,24 @@ var svgPathFasBookOpenReader	= `<path d="M352 96c0 53-43 96-96 96s-96-43-96-96s4
 var svgPathFasUserGraduate	= `<path d="M219.3 .5c3.1-.6 6.3-.6 9.4 0l200 40C439.9 42.7 448 52.6 448 64s-8.1 21.3-19.3 23.5L352 102.9V160c0 70.7-57.3 128-128 128s-128-57.3-128-128V102.9L48 93.3v65.1l15.7 78.4c.9 4.7-.3 9.6-3.3 13.3s-7.6 5.9-12.4 5.9H16c-4.8 0-9.3-2.1-12.4-5.9s-4.3-8.6-3.3-13.3L16 158.4V86.6C6.5 83.3 0 74.3 0 64C0 52.6 8.1 42.7 19.3 40.5l200-40zM129.1 323.2l83.2 88.4c6.3 6.7 17 6.7 23.3 0l83.2-88.4c73.7 14.9 129.1 80 129.1 158.1c0 17-13.8 30.7-30.7 30.7H30.7C13.8 512 0 498.2 0 481.3c0-78.1 55.5-143.2 129.1-158.1z"/>`;
 var svgPathFasRobot			= `<path d="M320 0c17.7 0 32 14.3 32 32V96H480c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H160c-35.3 0-64-28.7-64-64V160c0-35.3 28.7-64 64-64H288V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H208zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H304zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H400zM264 256c0-22.1-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40s40-17.9 40-40zm152 40c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40zM48 224H64V416H48c-26.5 0-48-21.5-48-48V272c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H576V224h16z"/>`;
 var svgPathFasUserAstronaut 	= `<path d="M370.7 96.1C346.1 39.5 289.7 0 224 0S101.9 39.5 77.3 96.1C60.9 97.5 48 111.2 48 128v64c0 16.8 12.9 30.5 29.3 31.9C101.9 280.5 158.3 320 224 320s122.1-39.5 146.7-96.1c16.4-1.4 29.3-15.1 29.3-31.9V128c0-16.8-12.9-30.5-29.3-31.9zM336 144v16c0 53-43 96-96 96H208c-53 0-96-43-96-96V144c0-26.5 21.5-48 48-48H288c26.5 0 48 21.5 48 48zM189.3 162.7l-6-21.2c-.9-3.3-3.9-5.5-7.3-5.5s-6.4 2.2-7.3 5.5l-6 21.2-21.2 6c-3.3 .9-5.5 3.9-5.5 7.3s2.2 6.4 5.5 7.3l21.2 6 6 21.2c.9 3.3 3.9 5.5 7.3 5.5s6.4-2.2 7.3-5.5l6-21.2 21.2-6c3.3-.9 5.5-3.9 5.5-7.3s-2.2-6.4-5.5-7.3l-21.2-6zM112.7 316.5C46.7 342.6 0 407 0 482.3C0 498.7 13.3 512 29.7 512H128V448c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64l98.3 0c16.4 0 29.7-13.3 29.7-29.7c0-75.3-46.7-139.7-112.7-165.8C303.9 338.8 265.5 352 224 352s-79.9-13.2-111.3-35.5zM176 448c-8.8 0-16 7.2-16 16v48h32V464c0-8.8-7.2-16-16-16zm96 32c8.8 0 16-7.2 16-16s-7.2-16-16-16s-16 7.2-16 16s7.2 16 16 16z"/>`;
+var svgPathFasUserNinja		= `<path d="M224 256c-57.2 0-105.6-37.5-122-89.3c-1.1 1.3-2.2 2.6-3.5 3.8c-15.8 15.8-38.8 20.7-53.6 22.1c-8.1 .8-14.6-5.7-13.8-13.8c1.4-14.7 6.3-37.8 22.1-53.6c5.8-5.8 12.6-10.1 19.6-13.4c-7-3.2-13.8-7.6-19.6-13.4C37.4 82.7 32.6 59.7 31.1 44.9c-.8-8.1 5.7-14.6 13.8-13.8c14.7 1.4 37.8 6.3 53.6 22.1c4.8 4.8 8.7 10.4 11.7 16.1C131.4 28.2 174.4 0 224 0c70.7 0 128 57.3 128 128s-57.3 128-128 128zM0 482.3C0 396 61.3 324.1 142.7 307.6l68.5 91.4c6.4 8.5 19.2 8.5 25.6 0l68.5-91.4C386.7 324.1 448 396 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM160 96c-8.8 0-16 7.2-16 16s7.2 16 16 16H288c8.8 0 16-7.2 16-16s-7.2-16-16-16H160z"/>`;
+var svgPathFasDragon 		= `<path d="M352 124.5l-51.9-13c-6.5-1.6-11.3-7.1-12-13.8s2.8-13.1 8.7-16.1l40.8-20.4L294.4 28.8c-5.5-4.1-7.8-11.3-5.6-17.9S297.1 0 304 0H416h32 16c30.2 0 58.7 14.2 76.8 38.4l57.6 76.8c6.2 8.3 9.6 18.4 9.6 28.8c0 26.5-21.5 48-48 48H538.5c-17 0-33.3-6.7-45.3-18.7L480 160H448v21.5c0 24.8 12.8 47.9 33.8 61.1l106.6 66.6c32.1 20.1 51.6 55.2 51.6 93.1C640 462.9 590.9 512 530.2 512H496 432 32.3c-3.3 0-6.6-.4-9.6-1.4C13.5 507.8 6 501 2.4 492.1C1 488.7 .2 485.2 0 481.4c-.2-3.7 .3-7.3 1.3-10.7c2.8-9.2 9.6-16.7 18.6-20.4c3-1.2 6.2-2 9.5-2.2L433.3 412c8.3-.7 14.7-7.7 14.7-16.1c0-4.3-1.7-8.4-4.7-11.4l-44.4-44.4c-30-30-46.9-70.7-46.9-113.1V181.5v-57zM512 72.3c0-.1 0-.2 0-.3s0-.2 0-.3v.6zm-1.3 7.4L464.3 68.1c-.2 1.3-.3 2.6-.3 3.9c0 13.3 10.7 24 24 24c10.6 0 19.5-6.8 22.7-16.3zM130.9 116.5c16.3-14.5 40.4-16.2 58.5-4.1l130.6 87V227c0 32.8 8.4 64.8 24 93H112c-6.7 0-12.7-4.2-15-10.4s-.5-13.3 4.6-17.7L171 232.3 18.4 255.8c-7 1.1-13.9-2.6-16.9-9s-1.5-14.1 3.8-18.8L130.9 116.5z"/>`;
 
 
 
-
-
-
+function htmlHighscores(tab){
+	let s=`<div style="margin: 1rem;width: 100%-2rem;"><table width="100%">`;
+	for(let i=0;i<tab.length;i++){
+		s+=`<tr>
+					<td>${(i+1)}. </td>
+					<td>${tab[i]['pseudo']} ${tab[i]['club']=='Aucun' ? '' : '[Club '+tab[i]['club']+']'}</td>
+					<td>${ tab[i]['departement']=='Aucun' ? '' : '('+tab[i]['departement']+')' }</td>
+					<td  align="right">${tab[i]['points']} pts</td>
+				</tr>`;
+	}
+	s+="</table></div>";
+	return s;
+}
 
 
 function htmlStatsChapitre(idChap){
@@ -220,31 +232,48 @@ function htmlTrophee(trophee){
 
 
 function htmlProfil(){
+		const sourceCSS=`
+		select,input {
+			font-size : .9rem;
+			font-family : Nunito,Futura,Arial;
+		}
+	`;
+	const style=document.createElement('style');
+	style.textContent=sourceCSS;
+	document.head.append(style);
+
 	// on utilise la classe "trophée" ? Faire une autre classe
 	let s=`
 		<div style="flex-grow:1;padding:0 1rem;margin-top:.2rem">
-			<div style="display:flex;justify-content:space-between">
+			<div style="display:flex;justify-content:space-between;align-items:center">
 				<div>Pseudo : </div>
 				<div>
 					<input style="display:inline" type="text" id="inputPseudo" name="inputPseudoName" size="10" maxlength="10" value="${user.pseudo}">
 				</div>
 			</div>
-			<div style="display:flex;justify-content:space-between">
-				<div>Établissement : </div>
+			<div style="display:flex;justify-content:space-between;align-items:center">
+				<div>Département : </div>
 				<div>
-					<select name="inputEtablissementName" id="inputEtablissement">
-						<option value="Aucun">Aucun</option>
-						<option value="FST Nancy">FST Nancy</option>
-						<option value="Callot">Callot</option>
-						<option value="Chopin">Chopin</option>
-						<option value="JDA">JDA</option>
-						<option value="Loritz">Loritz</option>
-						<option value="Poinca">Poinca</option>
-						<option value="Sigis">Sigis</option>
+					<select name="inputDepartementName" id="inputDepartement">
+						<option value="Aucun">Aucun</option>`;
+
+	for(let i=1;i<=95;i++){
+		let dep=("0" + i).slice(-2)
+		s+=`			<option value="${dep}">${dep}</option>`;
+	}
+	for(let i=971;i<=978;i++){
+		s+=`			<option value="${i}">${i}</option>`;
+	}
+	for(let i=986;i<=988;i++){
+		s+=`			<option value="${i}">${i}</option>`;
+	}
+	s+=`				<option value="AEFE">AEFE</option>`;
+	s+=`				<option value="Autre">Autre</option>`;
+	s+=`
 					</select>
 				</div>
 			</div>
-			<div style="display:flex;justify-content:space-between">
+			<div style="display:flex;justify-content:space-between;align-items:center">
 				<div>Club : </div>
 				<div>
 					<select name="inputClubName" id="inputClub">
@@ -271,8 +300,10 @@ function htmlProfilStats(){
 			<span class="success">${user.repJustes} réussies</span>.
 			</div>
 			<div style="margin:0 1rem; width:calc(100% - 2rem);height:.5rem">${htmlTripleBarre([user.repFausses,user.repNeutres,user.repJustes])}</div>
-			<!--${user.combo} réponses correctes d'affilée (${user.combo*(user.combo+1)/2} pts cumulés).-->
 			`;
+	if(user.combo>=2){
+		s+=`<div style="padding:.1rem 1rem">${user.combo} réponses correctes d'affilée !</div>`;
+	}
 	return s;
 }
 
@@ -339,7 +370,8 @@ function htmlQuetesLongues(){
 	return s;
 }
 
-function htmlGraphiques(){
+
+(()=>{
 	/* le style du composant : */
 	const sourceCSS=`
 		.histogramme{
@@ -355,7 +387,7 @@ function htmlGraphiques(){
 			flex:1;
 			display:flex;
 			flex-direction: column-reverse;
-		  align-items: stretch; 
+		  	align-items: stretch; 
 		}
 		.histogramme-colonne-reverse{
 			flex:1;
@@ -363,10 +395,6 @@ function htmlGraphiques(){
 			flex-direction: column;
 		  align-items: stretch;
 		  /*justify-content: flex-end;
-		}
-		.histogramme-barre{
-			background-color:var(--c-primaire);
-			border: 1px var(--c-primaire) solid;
 		}
 		.histogramme-legende{
 			width: 100%;
@@ -377,7 +405,12 @@ function htmlGraphiques(){
 	const style=document.createElement('style');
 	style.textContent = sourceCSS;
 	document.head.append(style);
-	/* - - --  fin style - - - */
+
+	/* - - --  fin style du composant histogramme - - - */
+})();
+
+function htmlGraphiques(){
+	
 	let s=`<div class="histogramme">`;
 	let max=0;
 	let indexMax=0;
@@ -396,7 +429,7 @@ function htmlGraphiques(){
 		for (let i=0; i<48;i++){
 			s+=`<div class="histogramme-colonne">
 					<!-- ici, soit un div avec hauteur non maximale, soit plusieurs divs-->
-					<div class="histogramme-barre" style="height:${100*user.seriePointsHeures[i]/max}%"></div>
+					<div class="histogramme-barre" style="background-color:var(--c-primaire);border: 1px var(--c-primaire) solid;height:${100*user.seriePointsHeures[i]/max}%"></div>
 				</div>`;
 		}
 
