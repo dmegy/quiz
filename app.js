@@ -19,7 +19,36 @@
 
 
 // - - - - - - V A R I A B L E S - - - - - - - - 
+const URL_HIGHSCORES = "https://damienmegy.xyz/php/quiz/out/highscores.txt";
+const URL_LOG_QUESTION = "https://damienmegy.xyz/php/quiz/stats_questions.php";
+const URL_LOG_QUIZ = "https://damienmegy.xyz/php/quiz/stats.php";
+const URL_COMPTEUR = 'https://damienmegy.xyz/php/quiz/compteur.php';
 
+
+
+let modePrive=false;
+// par défault
+// finir d'implémenter ça sur les fonctions de highscore. 
+// Utiliser l'icone "navigation anonyme", ça sera compréhensible facilement
+function mode(bool){
+	if(bool){
+			if(modePrive)
+			return "privé";
+		else
+			return "public";
+	}
+	else{
+		if(modePrive)
+			return "public";
+		else
+			return "privé";
+	}
+}
+
+function basculerMode(){
+	modePrive=!modePrive;
+	actualiserAffichage();
+}
 
 // pour les highscores
 let evenements=[];
@@ -43,7 +72,7 @@ let timeoutQuiz; // gestion timer du lancement automatique des quiz
 
 const probaCadeau=0.2; // proba d'avoir un cadeau (petit, en points)
 const probaBooster=0.2; //  proba d'obtenir un booster après un quiz fini
-const dureeBooster= 10*60*1000; // 10 minutes
+const dureeBooster= 5*60*1000; // 5 minutes
 
 // enlever ?
 let aujourdhui={"barrePoints":0,"barreQuiz":0};// booléens pour savoir si les quetes du jour sont validées
@@ -65,7 +94,7 @@ let t0=new Date();
 let user={
 	"premiereConnexion":t0,
 	"userId":toB64(t0.getTime()),
-	"pseudo":"user"+toB64(t0.getTime()), 
+	"pseudo":"user"+toB64(t0.getTime()).slice(-4), 
 	"avatar":"", /* type : dataURL*/
 	"affiliationEtablissement":"",
 	"affiliationClub":"",
@@ -240,6 +269,11 @@ function recupererDonneesLocales(){
 	if(isLocalStorageEnabled()) { // si localStorage est supporté :
 		console.log("local storage supporté : on récupère les données locales");
 		// inutile ?
+
+
+		// cette fonction est bugguée à cause des objets "nestés" : ceux du localstorage écrasent les autres
+		// régler ça.
+
 		if (window.localStorage.getItem("points") !== null) 
 		  points=parseInt(window.localStorage.getItem('points'),10);
 
@@ -265,7 +299,7 @@ function recupererDonneesLocales(){
 
 
 		if (window.localStorage.getItem("themes") !== null){
-			themes= {...chapitres, ...JSON.parse(window.localStorage.getItem('themes'))};
+			themes= {...themes, ...JSON.parse(window.localStorage.getItem('themes'))};
 		 } 
 
 		 if (window.localStorage.getItem("chapitres") !== null){
@@ -580,7 +614,7 @@ function afficherInfoTheme(id){ // lorsqu'on clique sur un thème :
 
 	// lancement automatique : (la barre de progression est gérée en css, le style est ptogrammé pour 15 secondes)
 	// éventuellement permettre d'avoir des temps différents avec des variables css
-	 timeoutQuiz = window.setTimeout(demarrerQuiz,15000); // si modif de temps, modifier le css également
+	//timeoutQuiz = window.setTimeout(demarrerQuiz,15000); // si modif de temps, modifier le css également
 }
 
 
@@ -616,7 +650,7 @@ function goto(e,refreshMathJax=true){
 
 	// tableau highscores
 	if(e=="accueil"){
-		fetch("https://damienmegy.xyz/php/quiz/out/highscores.txt?v="+(new Date().getTime()))
+		fetch(URL_HIGHSCORES, {cache: "no-store"})
 		.then((response) => response.text())
   	.then((data)=>ecrireScores(data));
 	}
@@ -631,6 +665,8 @@ function goto(e,refreshMathJax=true){
 
 	// activation/désactivation du scroll :
 	window.scrollTo(0,0); // scroller à l'ancien scroll à la place ?
+	document.getElementById("main").scrollTo(0,0);
+
 	if(e=='themes' || e=='trophees'||e=='info'){
 		scroll();
 	}
@@ -754,7 +790,11 @@ dans ce cas, le window.onload n'arrive pas, mais ça ne bloque pas l'application
 // on est dnas le onload donc tous les scripts etc sont chargés.
 
 function demarrage(){
-	console.log("Demarrage")
+	console.log("Demarrage");
+
+	// appel sans argument, ça va ermplir avec des "XXX"
+
+
 	// on copie les données externes _questions, _themes et _chapitres dans de nouveaux objets, par sécurité
 	// inutile ?
 
@@ -1093,7 +1133,10 @@ const capitaliser = (str) => { // met le première caractère d'une chaîne en c
 
 function iconeUser(pts){
 	let icone="";
-	if(pts>20000)
+	// si on est en mode privé, on affiche l'icone correspondante
+	if(modePrive)
+		icone="FasUserSecret";
+	else if(pts>20000)
 		icone="FasDragon";
 	else if(pts>15000)
 		icone="FasUserNinja";
@@ -1115,11 +1158,11 @@ function iconeUser(pts){
 // un composant...
 
 function htmlPoints(){
-	let s=`<span style="font-weight:400"><span style="position:relative">${user.points} pt`;
-	if(user.points>0) s+="s";
-
-	s+=`<span class="notif">Niv. ${niveau(user.points)}</span`;
-	s+="</span></span>";
+	let s=`<span style="font-weight:400;position:relative">${user.points} pt`;
+	if(user.points!=1)
+		s+="s";
+	s+=`<span class="notif">Niv. ${niveau(user.points)}</span>`;
+	s+="</span>";
 	return s;
 }
 
@@ -1138,7 +1181,7 @@ window.addEventListener('load',()=>{
 	// pas besoin de retour ?
 	if(!sessionEnCours){
 		console.log("pas de session en cours");
-		fetch('https://damienmegy.xyz/php/quiz/compteur.php')
+		fetch(URL_COMPTEUR)
 			.then((response) => response.text())
   		.then((data) => console.log(data));
 	}
@@ -1153,7 +1196,10 @@ window.addEventListener('load',()=>{
 
 
   	function ecrireScores(data){
-
+  		// entrée : le texte du csv avec toutes les entrées... 
+  		// on devrait laisser php épurer ça, voire calculer le tableau...
+  		// seul problème : j'ai tout oublié en php
+  		
   		const rows = data.split("\n");
 
   		for(let i=rows.length-2;i>=0;i--){

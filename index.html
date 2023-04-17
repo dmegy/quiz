@@ -11,7 +11,6 @@
     <meta name="description" content="Quiz de Mathématiques: du niveau fin collège à bac+1">
     <meta name="author" content="Damien Mégy">
     <title>Quiz de Mathématiques</title>
-    <meta name="theme-color" content="#081017"><!-- #00417a pour le bleu-->
 
     <meta name="twitter:card" content="summary_large_image">
 		<meta name="twitter:site" content="@ClubMathNancy">
@@ -20,26 +19,37 @@
 		<meta name="twitter:description" content="Questionnaires niveau fin collège à bac+1 : calcul mental, calcul littéral, équations, trigonométrie, nombres complexes, fonctions, quantificateurs, logique, algèbre linéaire...">
 		<meta name="twitter:image" content="http://dmegy.perso.math.cnrs.fr/quiz/assets/twittercard.png">
 
-		<link rel="preload" href="questions.js" as="script">
-  	<link rel="preload" href="themes.js" as="script">
-  	<link rel="preload" href="composants.js" as="script">
-  	<link rel="preload" href="app.js" as="script">
-  	<!-- les styles non inlinés, (boutons, composants des autres pages etc) -->
+
+    <meta name="theme-color" content="#081017"><!-- #00417a pour le bleu-->
+		<link rel="manifest" href="manifest.webmanifest">
+
+		<link rel="preload" href="questions.js?v=13" as="script">
+  	<link rel="preload" href="themes.js?v=13" as="script">
+  	<link rel="preload" href="composants.js?v=13" as="script">
+  	<link rel="preload" href="app.js?v=13" as="script">
 
 
   	<!-- ceci fait ramer alors que ça devrait pas ! et ça fait une erreur aussi ?? -->
 		<!-- <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es2018"></script>-->
-		<script type="text/javascript" defer src="composants.js"></script>
-		<script type="text/javascript" defer src="themes.js"></script>
-		<script type="text/javascript" defer src="questions.js"></script>
-		<script type="text/javascript" defer src="app.js"></script>
-		<!-- en async, le javascript non critique au démarrage -->
-		<script type="text/javascript" async src="app2.js"></script>
+
+		<!-- en defer, les scripts critiques pour la première interaction, dans le bon ordre -->
+
+		<script defer type="text/javascript" src="questions.js?v=13"></script>
+		<script defer type="text/javascript" src="composants.js?v=13"></script>
+		<script defer type="text/javascript" src="themes.js?v=13"></script>
+		<script defer type="text/javascript" src="app.js?v=13"></script>
+
+		<!-- en async, le javascript non critique pour la page d'accueil -->
+		<script async type="text/javascript" src="app2.js?v=13"></script>
 
 
   	<style>
+  		/* au lieu de *tout* inliner, on devrait couper en deux 
+  		** et prefetch la seconde partie (au lieu de preload) 
+  		** pas une grande différence cependant... donc autant tout mettre au même endroit ?
+  		*/
 
-  		/*  - - - - - S T Y L E S   C R T I Q U E S - - - - - - -*/
+  		/* - - - -   S T Y L E S    S P I N N E R   - - - - - -*/
   		::-webkit-scrollbar {display: none;}
 
   		/* pour le loader */
@@ -135,6 +145,9 @@
 
 				--c-notif : var(--c-primaire);
 
+				--c-texte-sombre : hsl(var(--teinte-primaire) 25% 30%);
+				--c-texte-inactif : hsl(var(--teinte-primaire) 25% 40%);
+				--c-texte-moins : hsl(var(--teinte-primaire) 25% 55%);
 				--c-texte : hsl(var(--teinte-primaire) 25% 70%);
 				--c-texte-accent: var(--c-bleu-clair);
 				--c-texte-header : var(--c-blanc);
@@ -276,6 +289,12 @@
 			  font-size: 1.5rem;
 			  font-weight: 400;/*police grasse pas chargée au début !*/
 			  text-shadow: 0 0 .5em var(--c-accent);
+			}
+			footer{
+				padding: 2rem;
+				color: var(--c-texte-moins);
+			  font-size: 1rem;
+			  text-align:center;
 			}
 
 			main{
@@ -701,8 +720,8 @@
 
 
 
-
-		<link rel="preload" as="font" crossorigin href="assets/nunito-v16-latin-900.woff2" type="font/woff2">
+  	<!-- prefetch car pas prioritaire pour la page d'acceil-->
+		<link rel="prefetch" as="font" crossorigin href="assets/nunito-v16-latin-900.woff2" type="font/woff2">
 
 		<!-- habile : -->
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 110 100'><text y='0.9em' font-size='90'>🏆</text></svg>" />
@@ -738,8 +757,9 @@
 
 		
   	<!-- Le compteur global de points, masqué au début-->
-  	<div style="display:none" class="sync margin-l-r" data-action="toggle" data-param="(etat=='accueil')||(etat=='themes')||(etat=='info')||(etat=='user')||(etat=='trophees')">
+  	<div class="sync margin-l-r" data-action="toggle" data-param="(etat=='accueil')||(etat=='themes')||(etat=='info')||(etat=='user')||(etat=='trophees')">
   		<div class="sync" data-action="html" data-param="htmlPoints()">
+  			<span style="font-weight:400;position:relative">0 pts</span>
   		</div>
 		</div>
 
@@ -787,20 +807,20 @@
 
 
 
-  <main>
-  	<div class="colonne full-height">
+  <main id="main" style="overflow:auto;scrollbar-width: none;">
+  	<div id="mainCol" class="colonne full-height" >
 
   		
 
   <!-- - - - - - A C C U E I L - - - - - -->
-	<div id="accueil" class="sync noscroll full-height" data-action="toggle" data-param="(etat=='accueil')" style="overflow:auto;scrollbar-width: none;">
+	<div id="accueil" class="sync full-height" data-action="toggle" data-param="(etat=='accueil')" >
 		
 		<h2faux class="gras">
 			<svg class="svg-icone svg-superstrong-glow"   viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
 			 Bienvenue !
 		</h2faux>
 
-		<p>Cette appli de vrai/faux a été codée à la fois pour les étudiants de L1 de Nancy et pour les élèves du <a href="http://dmegy.perso.math.cnrs.fr/club" target="_blank">Club Mathématique de Nancy</a>.</p>
+		<!--<p>Cette appli de vrai/faux a été codée à la fois pour les étudiants de L1 de Nancy et pour les élèves du <a href="http://dmegy.perso.math.cnrs.fr/club" target="_blank">Club Mathématique de Nancy</a>.</p>-->
 
 		<h3faux class="gras">
 			
@@ -819,14 +839,134 @@
 		<h3faux class="gras">
 			 Highscores
 		</h3faux>
-		<div id="highscores"></div>
+		<div id="highscores" style="margin: 1rem;width: 100%-2rem;">
+			<!-- SNAPSHOT 2023-01-16 pour éviter le content shift quand les données arrivent-->
+			<table width="100%"><tbody><tr>
+					<td>1. </td>
+					<td>2bouteille </td>
+					<td>(54)</td>
+					<td align="right">15620 pts</td>
+				</tr><tr>
+					<td>2. </td>
+					<td>Rémy </td>
+					<td>(54)</td>
+					<td align="right">15310 pts</td>
+				</tr><tr>
+					<td>3. </td>
+					<td>Damien [Club Nancy]</td>
+					<td>(54)</td>
+					<td align="right">11515 pts</td>
+				</tr><tr>
+					<td>4. </td>
+					<td>Lexaperr88 </td>
+					<td>(88)</td>
+					<td align="right">7440 pts</td>
+				</tr><tr>
+					<td>5. </td>
+					<td>HibouVoyag </td>
+					<td>(54)</td>
+					<td align="right">6551 pts</td>
+				</tr><tr>
+					<td>6. </td>
+					<td>userlTB_ </td>
+					<td></td>
+					<td align="right">6438 pts</td>
+				</tr><tr>
+					<td>7. </td>
+					<td>StefFFJM </td>
+					<td>(85)</td>
+					<td align="right">6148 pts</td>
+				</tr><tr>
+					<td>8. </td>
+					<td>userlUiP </td>
+					<td></td>
+					<td align="right">5223 pts</td>
+				</tr><tr>
+					<td>9. </td>
+					<td>usermWwi </td>
+					<td></td>
+					<td align="right">4125 pts</td>
+				</tr><tr>
+					<td>10. </td>
+					<td>userOKWClY </td>
+					<td>(41)</td>
+					<td align="right">3675 pts</td>
+				</tr><tr><td colspan="4" style="border-top:solid var(--c-texte) 3px"></td></tr><tr>
+					<td>11. </td>
+					<td>userEzZO </td>
+					<td></td>
+					<td align="right">3457 pts</td>
+				</tr><tr>
+					<td>12. </td>
+					<td>userOKS07nF </td>
+					<td></td>
+					<td align="right">1904 pts</td>
+				</tr><tr>
+					<td>13. </td>
+					<td>usernC1Y [Club Nancy]</td>
+					<td>(88)</td>
+					<td align="right">1838 pts</td>
+				</tr><tr>
+					<td>14. </td>
+					<td>Anonymous </td>
+					<td></td>
+					<td align="right">1218 pts</td>
+				</tr><tr>
+					<td>15. </td>
+					<td>userOKVMDS8 </td>
+					<td></td>
+					<td align="right">1213 pts</td>
+				</tr><tr>
+					<td>16. </td>
+					<td>userAafP </td>
+					<td></td>
+					<td align="right">1053 pts</td>
+				</tr><tr>
+					<td>17. </td>
+					<td>firefox_M [Club Nancy]</td>
+					<td>(54)</td>
+					<td align="right">1031 pts</td>
+				</tr><tr>
+					<td>18. </td>
+					<td>users5aL </td>
+					<td></td>
+					<td align="right">897 pts</td>
+				</tr><tr>
+					<td>19. </td>
+					<td>Yann </td>
+					<td></td>
+					<td align="right">745 pts</td>
+				</tr><tr>
+					<td>20. </td>
+					<td>Matthieu </td>
+					<td>(89)</td>
+					<td align="right">654 pts</td>
+				</tr></tbody></table>
+		</div>
+
 		
-		
+		<!--
+	<footer class="footer">
+			- + - + - + - + - + - + - + - + - + - <br>
+			<a id="lienModalPartager" href="">Partager</a>
+			 - 
+			 Crédits - 
+			 Contribuer - 
+			 Exo7 - 
+			 ClubMathNancy
+	</footer>
+	<dialog id="modalPartager">Partage !! </dialog>
+	<script>
+		document.getElementById("lienModalPartager").addEventListener("click", (evt) => {
+			evt.preventDefault();
+			document.getElementById("modalPartager").showModal();
+		});
+</script>-->
 	</div> <!-- - - - - / A C C U E I L - - - - - -->
 
 
 	<!-- - - - - - C H O I X   D E S   T H E M E S - - - - - -->
-	<div class="sync fade-in " data-action="toggle" data-param="(etat=='themes')"  style="display:none;overflow:hidden;scrollbar-width: none;">
+	<div class="sync fade-in " data-action="toggle" data-param="(etat=='themes')"  style="display:none;">
 
 		<h2>
 			<svg class="svg-icone svg-strong-glow"   viewBox="0 0 512 512"><path d="M64 144c26.5 0 48-21.5 48-48s-21.5-48-48-48S16 69.5 16 96s21.5 48 48 48zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm48-208c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48z"/></svg>
@@ -851,7 +991,7 @@
 	
 	<!-- - - - - - I N F O (de thème)- - - - - -->
 
-	<div  id="info" class="sync full-height fade-in " data-action="toggle" data-param="(etat=='info')" style="display:none;overflow:auto;scrollbar-width: none;">
+	<div  id="info" class="sync full-height fade-in " data-action="toggle" data-param="(etat=='info')" style="display:none;">
 		<h3>
 			 Thème : <span class="sync" data-action="html" data-param="theme.titre"></span>
 		</h3>
@@ -864,6 +1004,7 @@
 		</p>
 
 		<div class="stats-theme">
+
 			<div style="flex-grow: 1;min-height: 5rem;" class="stats-theme-infos">
 				<span class="sync"  data-action="html" data-param="theme.questions.length">?</span> questions dont :
 				<div style="width:100%;height:.4rem"></div>
@@ -914,12 +1055,15 @@
 
 
 		<!-- barre de timer automatique -->
+		<!--
 		<div id="timerInfo" class="progress-bar">
-		<div class="progress-conteneur">
-			<div  class="progress-timer">&nbsp;</div>
+			<div class="progress-conteneur">
+				<div  class="progress-timer">&nbsp;</div>
+			</div>
 		</div>
-		</div>
+		-->
 
+		<div class="sync margin-l-r" data-action="html" data-param="htmlThemeLiens(theme.id)"></div>
 
 	</div><!-- - - - - / I N F O - - - - - -->
   
@@ -927,7 +1071,7 @@
 
   <!-- - - - - -  G A M E . O V E R - - - - - -->
 
-	<div id="gameOver" class="sync fade-in " data-action="toggle" data-param="(etat=='gameover')"  style="display:none;overflow:auto;scrollbar-width: none;">
+	<div id="gameOver" class="sync fade-in " data-action="toggle" data-param="(etat=='gameover')"  style="display:none;">
 	<div class="colonne full-height" style="text-align: center;">
 		<h1>
 			<svg style="transform:scale(2);" class="svg-icone sync svg-strong-glow"  data-action="html" data-param="svgPathFasSkullCrossbones" viewBox="0 0 512 512"></svg>
@@ -950,7 +1094,7 @@
 
 	<!-- - - - - -  U S E R - - - - - -->
 
-	<div id="user" class="sync fade-in " data-action="toggle" data-param="(etat=='user')"  style="display:none;overflow:auto;scrollbar-width: none;">
+	<div id="user" class="sync fade-in " data-action="toggle" data-param="(etat=='user')"  style="display:none;">
 	<div class="colonne full-height">
 
 		<div class="titre-categorie">
@@ -999,21 +1143,38 @@
 	<div class="sync margin-l-r" data-action="html" data-param="htmlQuetesLongues()"></div>
 
 	<h3>
-		<svg class="svg-icone fill-secondaire-accent"   viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg>
+		<svg class="svg-icone fill-secondaire-accent"   viewBox="0 0 512 512"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg>
 		 Activité sur 48h:
 	</h3>
 
 	<div class="sync margin-l-r" data-action="html" data-param="htmlGraphiques()"></div>
 
-	<!--<p>
-	Exporter les données sauvegardées (pour futur import sur un autre terminal par exemple)
 
-	<div id="exporter" class="bouton  bouton-coul"  onclick="saveTemplateAsFile('QuizMathSauvegarde'+new Date().toLocaleString()+'.json',window.localStorage)">
-				<i class="fa fa-file-export"></i> Exporter les données</div>
-	</p>-->
 	<div  class="bouton  bouton-coul-primaire"  onclick="afficherThemes()">
 				<svg class="svg-icone sync" viewBox="0 0 552 512" data-action="html" data-param="svgPathFasListUl"></svg>
 				 Allez, au boulot !</div>
+
+	<h3>
+		<svg class="sync svg-icone fill-secondaire-accent" viewBox="0 0 512 512" data-action="html" data-param="svgPathFasGear"></svg>
+		 Paramètres
+</h3>
+	<p style="font-weight:800">Installation de l'application</p>
+	<p>Sur mobile, tu peux «installer» l'application pour une utilisation hors-ligne. Une icône apparaîtra au côté des autres applications. Pour cela, il suffit d'aller dans les options du navigateur et de sélectionner «installer». Le navigateur propose ensuite d'ajouter une icône à l'écran d'accueil. L'application ne nécessite aucune permission ou accès aux données personnelles pour fonctionner.</p>
+
+	<p style="font-weight:800">Mode public/privé</p>
+	<p>En mode privé, ta progression et tes points ne sont pas envoyés au serveur, mais en contrepartie tu ne peux pas participer au tableau de highscores.</p>
+	<p>
+		Tu es actuellement en mode <span class="sync" data-action="html" data-param="mode(true)"></span>. 
+		Tu peux 
+	<span onclick="basculerMode()" style="color:var(--c-primaire-accent);text-decoration:underline;cursor:pointer">passer en mode <span class="sync" data-action="html" data-param="mode(false)"></span></span>.
+	</p>
+	<!--
+
+
+	<div id="exporter" class="bouton  bouton-coul-secondaire"  onclick="saveTemplateAsFile('QuizMathSauvegarde'+new Date().toLocaleString()+'.json',window.localStorage)">
+				 Exporter les données</div>-->
+
+
 	</div><!-- - - - - -  /colonne - - - - - -->
 	</div> <!-- - - - - -  / U S E R - - - - - -->
 
@@ -1023,11 +1184,11 @@
 
 	<!-- - - - - -  T R O P H É E S - - - - - -->
 
-	<div id="trophees" class="sync fade-in" data-action="toggle" data-param="(etat=='trophees')"  style="display:none;overflow:auto;scrollbar-width: none;">
+	<div id="trophees" class="sync fade-in" data-action="toggle" data-param="(etat=='trophees')"  style="display:none">
 		<div class="colonne full-height">
 
 			<h2>
-				<svg class="svg-icone svg-strong-glow"   viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H357.9C337 448 320 431 320 410.1c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C542.5 245 576 180.6 576 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"/></svg>
+				<svg class="svg-icone svg-strong-glow"   viewBox="0 0 576 512"><path d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H357.9C337 448 320 431 320 410.1c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C542.5 245 576 180.6 576 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"/></svg>
 					
 				 Trophées</h2>
 			<div id="listeTrophees"></div>
@@ -1063,7 +1224,7 @@
 
 
 	<!-- - - - - R E S U L T A T S   E T   F I N  - - - - - -->
-	<div class="sync fade-in " data-action="toggle" data-param="etat=='fin'" style="display:none;;overflow:hidden">
+	<div class="sync fade-in " data-action="toggle" data-param="etat=='fin'" style="display:none;">
 		<!--<h1>
 			<i class="fa fa-flag-checkered"></i> Quiz terminé
 		</h1>-->
@@ -1084,7 +1245,7 @@
 
 		</h1> 
 
-		<p>(La note est calculée avant les bonus)</p>
+		<p style="color:var(--c-texte-inactif)">La note est calculée avant les bonus. Elle peut être basse à cause des points négatifs. Ceux-ci sont nécessaires pour dissuader de répondre au hasard. <span style="font-weight:800">Décrocher la moyenne est déjà un bon résultat !</span></p>
 
 		<div style="margin: 1rem;width: 100%-2rem;">
    	<table width="100%" style="border-collapse:collapse">
@@ -1138,7 +1299,7 @@
 	</div>
 
 		 <h4 style="padding-top:1rem">Correction : </h4>
-		 <p>(Le choix effectué apparaît en surbrillance. Parfois, un commentaire explicatif est affiché.)</p>
+		 <div class="sync margin-l-r" data-action="html" data-param="htmlThemeLiens(theme.id)"></div>
 
 		<div id="correction" style="flex-direction:column-reverse;">
 			<!--- - - - - correction - - - - - -->
@@ -1162,9 +1323,6 @@
 
 
 
-	<!--<footer class="footer">
-			Crédits - Contribuer - Exo7 - ClubMathNancy
-	</footer>-->
 
 
 
@@ -1236,7 +1394,6 @@
 		 </div>
 	</div>
 	</div>
-
 
 
 	

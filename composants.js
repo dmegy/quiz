@@ -40,7 +40,7 @@ var svgPathFasCircleExclamation = `<path d="M256 512c141.4 0 256-114.6 256-256S3
 var svgPathFasCircleCheck 	= `<path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>`;
 /* Fa regular ?*/
 var svgPathFarCircleCheck = `<path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2 339.8L140.2 275.8C129.3 264.9 129.3 247.1 140.2 236.2C151.1 225.3 168.9 225.3 179.8 236.2L224 280.4L332.2 172.2C343.1 161.3 360.9 161.3 371.8 172.2C382.7 183.1 382.7 200.9 371.8 211.8L243.8 339.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"/>`;
-
+var svgPathFasGear			=`<path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336c44.2 0 80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80s35.8 80 80 80z"/>`;
 
 
 var svgPathFasUserLarge		= `<path d="M256 288c79.5 0 144-64.5 144-144S335.5 0 256 0S112 64.5 112 144s64.5 144 144 144zm-94.7 32C72.2 320 0 392.2 0 481.3c0 17 13.8 30.7 30.7 30.7H481.3c17 0 30.7-13.8 30.7-30.7C512 392.2 439.8 320 350.7 320H161.3z"/>`;
@@ -51,22 +51,33 @@ var svgPathFasRobot			= `<path d="M320 0c17.7 0 32 14.3 32 32V96H480c35.3 0 64 2
 var svgPathFasUserAstronaut 	= `<path d="M370.7 96.1C346.1 39.5 289.7 0 224 0S101.9 39.5 77.3 96.1C60.9 97.5 48 111.2 48 128v64c0 16.8 12.9 30.5 29.3 31.9C101.9 280.5 158.3 320 224 320s122.1-39.5 146.7-96.1c16.4-1.4 29.3-15.1 29.3-31.9V128c0-16.8-12.9-30.5-29.3-31.9zM336 144v16c0 53-43 96-96 96H208c-53 0-96-43-96-96V144c0-26.5 21.5-48 48-48H288c26.5 0 48 21.5 48 48zM189.3 162.7l-6-21.2c-.9-3.3-3.9-5.5-7.3-5.5s-6.4 2.2-7.3 5.5l-6 21.2-21.2 6c-3.3 .9-5.5 3.9-5.5 7.3s2.2 6.4 5.5 7.3l21.2 6 6 21.2c.9 3.3 3.9 5.5 7.3 5.5s6.4-2.2 7.3-5.5l6-21.2 21.2-6c3.3-.9 5.5-3.9 5.5-7.3s-2.2-6.4-5.5-7.3l-21.2-6zM112.7 316.5C46.7 342.6 0 407 0 482.3C0 498.7 13.3 512 29.7 512H128V448c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64l98.3 0c16.4 0 29.7-13.3 29.7-29.7c0-75.3-46.7-139.7-112.7-165.8C303.9 338.8 265.5 352 224 352s-79.9-13.2-111.3-35.5zM176 448c-8.8 0-16 7.2-16 16v48h32V464c0-8.8-7.2-16-16-16zm96 32c8.8 0 16-7.2 16-16s-7.2-16-16-16s-16 7.2-16 16s7.2 16 16 16z"/>`;
 var svgPathFasUserNinja		= `<path d="M224 256c-57.2 0-105.6-37.5-122-89.3c-1.1 1.3-2.2 2.6-3.5 3.8c-15.8 15.8-38.8 20.7-53.6 22.1c-8.1 .8-14.6-5.7-13.8-13.8c1.4-14.7 6.3-37.8 22.1-53.6c5.8-5.8 12.6-10.1 19.6-13.4c-7-3.2-13.8-7.6-19.6-13.4C37.4 82.7 32.6 59.7 31.1 44.9c-.8-8.1 5.7-14.6 13.8-13.8c14.7 1.4 37.8 6.3 53.6 22.1c4.8 4.8 8.7 10.4 11.7 16.1C131.4 28.2 174.4 0 224 0c70.7 0 128 57.3 128 128s-57.3 128-128 128zM0 482.3C0 396 61.3 324.1 142.7 307.6l68.5 91.4c6.4 8.5 19.2 8.5 25.6 0l68.5-91.4C386.7 324.1 448 396 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM160 96c-8.8 0-16 7.2-16 16s7.2 16 16 16H288c8.8 0 16-7.2 16-16s-7.2-16-16-16H160z"/>`;
 var svgPathFasDragon 		= `<path d="M352 124.5l-51.9-13c-6.5-1.6-11.3-7.1-12-13.8s2.8-13.1 8.7-16.1l40.8-20.4L294.4 28.8c-5.5-4.1-7.8-11.3-5.6-17.9S297.1 0 304 0H416h32 16c30.2 0 58.7 14.2 76.8 38.4l57.6 76.8c6.2 8.3 9.6 18.4 9.6 28.8c0 26.5-21.5 48-48 48H538.5c-17 0-33.3-6.7-45.3-18.7L480 160H448v21.5c0 24.8 12.8 47.9 33.8 61.1l106.6 66.6c32.1 20.1 51.6 55.2 51.6 93.1C640 462.9 590.9 512 530.2 512H496 432 32.3c-3.3 0-6.6-.4-9.6-1.4C13.5 507.8 6 501 2.4 492.1C1 488.7 .2 485.2 0 481.4c-.2-3.7 .3-7.3 1.3-10.7c2.8-9.2 9.6-16.7 18.6-20.4c3-1.2 6.2-2 9.5-2.2L433.3 412c8.3-.7 14.7-7.7 14.7-16.1c0-4.3-1.7-8.4-4.7-11.4l-44.4-44.4c-30-30-46.9-70.7-46.9-113.1V181.5v-57zM512 72.3c0-.1 0-.2 0-.3s0-.2 0-.3v.6zm-1.3 7.4L464.3 68.1c-.2 1.3-.3 2.6-.3 3.9c0 13.3 10.7 24 24 24c10.6 0 19.5-6.8 22.7-16.3zM130.9 116.5c16.3-14.5 40.4-16.2 58.5-4.1l130.6 87V227c0 32.8 8.4 64.8 24 93H112c-6.7 0-12.7-4.2-15-10.4s-.5-13.3 4.6-17.7L171 232.3 18.4 255.8c-7 1.1-13.9-2.6-16.9-9s-1.5-14.1 3.8-18.8L130.9 116.5z"/>`;
+var svgPathFasUserSecret	= `<path d="M224 16c-6.7 0-10.8-2.8-15.5-6.1C201.9 5.4 194 0 176 0c-30.5 0-52 43.7-66 89.4C62.7 98.1 32 112.2 32 128c0 14.3 25 27.1 64.6 35.9c-.4 4-.6 8-.6 12.1c0 17 3.3 33.2 9.3 48H45.4C38 224 32 230 32 237.4c0 1.7 .3 3.4 1 5l38.8 96.9C28.2 371.8 0 423.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7c0-58.5-28.2-110.4-71.7-143L415 242.4c.6-1.6 1-3.3 1-5c0-7.4-6-13.4-13.4-13.4H342.7c6-14.8 9.3-31 9.3-48c0-4.1-.2-8.1-.6-12.1C391 155.1 416 142.3 416 128c0-15.8-30.7-29.9-78-38.6C324 43.7 302.5 0 272 0c-18 0-25.9 5.4-32.5 9.9c-4.7 3.3-8.8 6.1-15.5 6.1zm56 208H267.6c-16.5 0-31.1-10.6-36.3-26.2c-2.3-7-12.2-7-14.5 0c-5.2 15.6-19.9 26.2-36.3 26.2H168c-22.1 0-40-17.9-40-40V169.6c28.2 4.1 61 6.4 96 6.4s67.8-2.3 96-6.4V184c0 22.1-17.9 40-40 40zm-88 96l16 32L176 480 128 288l64 32zm128-32L272 480 240 352l16-32 64-32z"/>`;
 
+
+function appendCSS(source){
+	const style=document.createElement('style');
+	style.textContent=source;
+	document.head.append(style);
+}
 
 
 function htmlHighscores(tab){
-	let s=`<div style="margin: 1rem;width: 100%-2rem;"><table width="100%">`;
+	let s=`<table width="100%">`;
+	let style=` style="color:var(--c-texte)"`;
 	for(let i=0;i<tab.length;i++){
+		if(i==10)
+			s+=`<tr><td colspan="4" style="border-top:solid var(--c-texte) 3px"></td></tr>`;
 		s+=`<tr>
 					<td>${(i+1)}. </td>
 					<td>${tab[i]['pseudo']} ${tab[i]['club']=='Aucun' ? '' : '[Club '+tab[i]['club']+']'}</td>
 					<td>${ tab[i]['departement']=='Aucun' ? '' : '('+tab[i]['departement']+')' }</td>
-					<td  align="right">${tab[i]['points']} pts</td>
+					<td align="right">${tab[i]['points']} pts</td>
 				</tr>`;
 	}
-	s+="</table></div>";
+	s+="</table>";
 	return s;
 }
+
 
 
 function htmlStatsChapitre(idChap){
@@ -78,7 +89,7 @@ function htmlStatsChapitre(idChap){
 
 function htmlBoutonTheme(id){
 	/* - - - S T Y L E S - - - */
-	const sourceCSS=`
+	appendCSS(`
 		.bouton-theme-progress{
 			background:var(--c-secondaire-accent);
 			position:absolute;
@@ -89,11 +100,8 @@ function htmlBoutonTheme(id){
 		}
 		.bouton-theme-texte{
 			position:relative;
-		}`;
+		}`);
 	// on devrait mettre la classe bouton-petit ici...
-	const style=document.createElement('style');
-	style.textContent=sourceCSS;
-	document.head.append(style);
 
 	let s=`
 		<div 
@@ -115,26 +123,21 @@ function htmlBoutonTheme(id){
  - - - - - - - - - - - - - - - - - - - - - - - - -- - -*/
 
 /* style des barres de progression, soit triple barre soit bare simple */
-( ()=>{
-	const sourceCSS=`
-		.barre-conteneur{
-			background-color: var(--c-moins-sombre);
-			width: 100%; /* de son contenant */
-			overflow: hidden;
-			height: 100%; /* de son contenant*/
-			padding: 0;
-			margin: 0;
-			border-radius: 1rem;
-			display: flex;
-		}
-		.barre{
-			height: 100%;
-		}
-	`;
-	const style=document.createElement('style');
-	style.textContent=sourceCSS;
-	document.head.append(style);
-})();
+appendCSS(`
+	.barre-conteneur{
+		background-color: var(--c-moins-sombre);
+		width: 100%; /* de son contenant */
+		overflow: hidden;
+		height: 100%; /* de son contenant*/
+		padding: 0;
+		margin: 0;
+		border-radius: 1rem;
+		display: flex;
+	}
+	.barre{
+		height: 100%;
+	}
+`);
 
 
 
@@ -202,6 +205,29 @@ function htmlIconeNote(note){
 }
 
 
+function htmlThemeLiens(themeId){
+	console.log(themeId)
+	// mettre 'id' dans les paramètres de la fonction ?
+	let s=``;
+	if(themes[themeId].liens!=undefined){
+		console.log(`le thème ${themeId} a des liens externes`);
+		s+=`<span style="color:var(--c-texte-sombre)">
+			Si besoin, ressources externes : <ul>`;
+		for(let i=0; i<themes[themeId].liens.length;i++){
+			s+=`<li><a style="color:var(--c-primaire-40)" href="${themes[themeId].liens[i].URL}" target="_blank">
+					${themes[themeId].liens[i].titre}
+				</a></li> `;
+		}
+		s+=`</ul>(Les liens s'ouvrent dans un nouvel onglet)`;
+
+	} else{
+		console.log(`le thème ${themeId} n'a pas de liens externes`);
+	}
+	return s;
+
+}
+
+
 
 function htmlTrophee(trophee){
 	let date=new Date(trophee.date);
@@ -246,9 +272,9 @@ function htmlProfil(){
 	let s=`
 		<div style="flex-grow:1;padding:0 1rem;margin-top:.2rem">
 			<div style="display:flex;justify-content:space-between;align-items:center">
-				<div>Pseudo : </div>
+				<div>Entrer un pseudo : </div>
 				<div>
-					<input style="display:inline" type="text" id="inputPseudo" name="inputPseudoName" size="10" maxlength="10" value="${user.pseudo}">
+					<input style="display:inline" type="text" id="inputPseudo" name="inputPseudoName" size="8" maxlength="10" value="${user.pseudo}">
 				</div>
 			</div>
 			<div style="display:flex;justify-content:space-between;align-items:center">
@@ -371,43 +397,35 @@ function htmlQuetesLongues(){
 }
 
 
-(()=>{
-	/* le style du composant : */
-	const sourceCSS=`
-		.histogramme{
-			background-color:var(--c-bg);
-			width:100%;
-			height:3rem;
-			display:flex;
-			gap: 1px;
-			align-items: stretch;
-			flex-direction: row-reverse;
-		}
-		.histogramme-colonne{
-			flex:1;
-			display:flex;
-			flex-direction: column-reverse;
-		  	align-items: stretch; 
-		}
-		.histogramme-colonne-reverse{
-			flex:1;
-			display:flex;
-			flex-direction: column;
-		  align-items: stretch;
-		  /*justify-content: flex-end;
-		}
-		.histogramme-legende{
-			width: 100%;
-			text-align: center;
-			margin-top: .2rem;
-		}
-	`;
-	const style=document.createElement('style');
-	style.textContent = sourceCSS;
-	document.head.append(style);
-
-	/* - - --  fin style du composant histogramme - - - */
-})();
+appendCSS(`
+	.histogramme{
+		background-color:var(--c-bg);
+		width:100%;
+		height:3rem;
+		display:flex;
+		gap: 1px;
+		align-items: stretch;
+		flex-direction: row-reverse;
+	}
+	.histogramme-colonne{
+		flex:1;
+		display:flex;
+		flex-direction: column-reverse;
+	  	align-items: stretch; 
+	}
+	.histogramme-colonne-reverse{
+		flex:1;
+		display:flex;
+		flex-direction: column;
+	  align-items: stretch;
+	  /*justify-content: flex-end;*/
+	}
+	.histogramme-legende{
+		width: 100%;
+		text-align: center;
+		margin-top: .2rem;
+	}
+`);
 
 function htmlGraphiques(){
 	

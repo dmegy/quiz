@@ -428,8 +428,9 @@ function corrigerQuestion(){
 
 	document.getElementById(`question-${numQuestion}`).insertAdjacentHTML('afterbegin',enTete);
 	
-
-
+	if(!modePrive)
+		logQuestion();
+	
 	// la suite : question suivante ou fin, s'il n'y a plus de question, ou game over
 	suite();
 }
@@ -642,32 +643,41 @@ function octroyerBooster(){
 
 
 function envoyerStatsServeur(){
-	let total=0;
-	// vérification _très_ sommaire, apparemment inutile, les points ont déjà été recorrigés ?
-	for(let i=0;i<historique.pointsGagnes.length;i++){
-		total+=historique.pointsGagnes[i].points;
+	if(!modePrive){
+		let total=0;
+		// vérification _très_ sommaire, apparemment inutile, les points ont déjà été recorrigés ?
+		for(let i=0;i<historique.pointsGagnes.length;i++){
+			total+=historique.pointsGagnes[i].points;
+		}
+		if(total==user.points){
+			$.ajax({
+				method: 'post',
+				url: URL_LOG_QUIZ,
+				data: {
+				  'user' : JSON.stringify(user),
+				  'historique' : JSON.stringify(historique)
+				}
+			});
+			console.log("Points envoyés");
+		}else{
+			console.log("Points non envoyés");
+		}
 	}
-	if(total==user.points){
-		$.ajax({
-			method: 'post',
-			url: 'https://damienmegy.xyz/php/quiz/stats.php',
-			data: {
-			  'user' : JSON.stringify(user),
-			  'historique' : JSON.stringify(historique)
-			}
-		});
-		console.log("Points envoyés");
-	}else{
-		console.log("Points non envoyés");
+	else{
+		console.log("mode privé : on n'envoie rien");
 	}
-	
+}
 
-	/* renvoie une erreur !
-	** CORS? l'ancienne version marchait, 
-	** comprendre ce qui ne marche plus !! 
-	** de toute façon on s'en fout pour l'instant
-	*/
-
+function logQuestion(){
+	$.ajax({
+		method: 'post',
+		url: URL_LOG_QUESTION,
+		data: {
+		  'user' : JSON.stringify(user),
+		  'historique' : JSON.stringify(historique)
+		}
+	});
+	console.log("Question logguée");
 }
 
 
@@ -790,6 +800,7 @@ function actualiserBarres(a,b,c){
 
 }
 
+/*
 function recupererHighScore(){
 	fetch('http://damienmegy.xyz/php/vf/vf_record.txt?stamp='+ (new Date()).getTime())
 	  		.then(response => response.text())
@@ -798,8 +809,28 @@ function recupererHighScore(){
 				document.getElementById("record").innerHTML=record; // au lieu de tout réactualiser
 		  })
 }
+*/
 
 
+const saveTemplateAsFile = (filename, dataObjToWrite) => {
+	// enregistre/downloade un objet dans un fichier texte chez l'utilsateur
+	// objet -> JSON.stringify -> Blob json -> URL -> link puis clique le link
+    const blob = new Blob([JSON.stringify(dataObjToWrite, null, 4)], { type: "text/json" });
+    const link = document.createElement("a");
+
+    link.download = filename;
+    link.href = window.URL.createObjectURL(blob);
+    link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+
+    const evt = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+    });
+
+    link.dispatchEvent(evt);
+    link.remove()
+};
 
 
 

@@ -1,4 +1,6 @@
-[{"texte":"$|1-\\pi|>2$.","reponses":[{"texte":"Vrai","correct":true},{"texte":"Faux","correct":false}]},
+_questions = [
+{"texte":"Tautologie.","reponses":[{"texte":"Vrai","correct":true},{"texte":"Faux","correct":false}]},
+{"texte":"$|1-\\pi|>2$.","reponses":[{"texte":"Vrai","correct":true},{"texte":"Faux","correct":false}]},
 {"texte":"$|5-3\\sqrt 2|>1$.","reponses":[{"texte":"Vrai","correct":false},{"texte":"Faux","correct":true}]},
 {"texte":"$\\sqrt{x^2}=|x|$.","reponses":[{"texte":"Vrai","correct":true},{"texte":"Faux","correct":false}]},
 {"texte":"$|x+3|<2$ est équivalent à $1 < x < 5$.","reponses":[{"texte":"Vrai","correct":false},{"texte":"Faux","correct":true}]},
@@ -1463,4 +1465,5 @@
 {"texte":"$(a+3)^4$ $=a^4+12a^3b+54a^2+108a+27$.","reponses":[{"texte":"Vrai","correct":false},{"texte":"Faux","correct":true}]},
 {"texte":"$(a+2)^4$ $=a^4+4a^3b+6a^2+4a+2$.","reponses":[{"texte":"Vrai","correct":false},{"texte":"Faux","correct":true}]},
 {"texte":"$(a+b)^5$ $=a^5+5a^4b+10a^3b^2$ $+10a^2b^3+5ab^4+b^5$.","reponses":[{"texte":"Vrai","correct":true},{"texte":"Faux","correct":false}]},
-{"texte":"$(a+1)^5$ $=a^5+5a^4+10a^3$ $+10a^2+5a+1$.","reponses":[{"texte":"Vrai","correct":true},{"texte":"Faux","correct":false}]}]
+{"texte":"$(a+1)^5$ $=a^5+5a^4+10a^3$ $+10a^2+5a+1$.","reponses":[{"texte":"Vrai","correct":true},{"texte":"Faux","correct":false}]}
+];

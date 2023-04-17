@@ -11,34 +11,6 @@ const range = (start, stop) => Array.from({ length: stop - start + 1}, (_, i) =>
 // constante : l'objet sera copié
 
 const _themes={
-	"tables_parentheses1":{
-		"etiquette" : "Multiplications et parenthèses",
-		"niveau":-4,
-		"titre" : "Tables de multiplication et parenthèses",
-		"info" : "Calcul mental, multiplications avec parenthèses.",
-		"questions" : [...range(1714,1753)]
-	},
-	"suites_arithmetiques_variations":{
-		"etiquette" : "Variations",
-		"niveau":-4,
-		"titre" : "Variation des suites arithmétiques",
-		"info" : "Questions sur les suites arithmétiques et leurs variations : croissante, monotonie, caractère borné, majoré etc.",
-		"questions" : [...range(1660,1713)]
-	},
-	"suites_arithmetiques":{
-		"etiquette" : "Généralités",
-		"niveau":-4,
-		"titre" : "Suites arithmétiques, Généralités",
-		"info" : "Questions sur les suites arithmétiques.",
-		"questions" : [...range(1586,1659)]
-	},
-	"sommes_arithmetiques":{
-		"etiquette" : "Sommes",
-		"niveau":-4,
-		"titre" : "Sommes arithmétiques",
-		"info" : "Quelques sommes de termes consécutifs de suites arithmétiques. ",
-		"questions" : [...range(1555,1585)]
-	},
 	"quadrilateres":{
 		"etiquette" : "Quadrilatères",
 		"niveau":-4,
@@ -58,13 +30,6 @@ const _themes={
 		"titre" : "Symétries",
 		"info" : "Axes et centres de symétrie des polygones du plan.",
 		"questions" : [...range(1274,1304)]
-	},
-	"fonctions_affines":{
-		"etiquette" : "Fonctions affines",
-		"niveau":-4,
-		"titre" : "Fonctions affines",
-		"info" : "Fonctions linéaires et affines, images, antécédents, coefficients directeurs, ordonnée à l'origine...",
-		"questions" : [...range(1467,1514)]
 	},
 	"abs1":{
 		"etiquette" : "Valeur absolue",
@@ -436,13 +401,6 @@ const _themes={
 		"titre" : "Dérivabilité",
 		"info" : "",
 		"questions" : [...range(1166,1174)]
-	},
-	"discriminants1":{
-		"etiquette" : "Discriminants",
-		"niveau":1,
-		"titre" : "Discriminants",
-		"info" : "",
-		"questions" : [...range(1515,1554)]
 	}
 };
 
@@ -457,34 +415,16 @@ const _themes={
 
 // Mettre les étiquettes ici ? Et pas dans les thèmes ?
 // Car l'étiquette dépend du titre du chapitre
-// changer ceci, mettre directement les questions ici ? 
-// du genre :
-//"calcul_mental":{
-//		"nom": "Calcul mental",
-//		"themes":[
-//			{"étiquette thème 1","519-156 618 978 1023-1027"},
-//			{"étiquette thème 2","519-156 618 978 1023-1027"}
-//		],
-//	},
-
-// ou alors mettre carrément les thèmes avec l'ancienne structure dans les chapitres:
-// ne pas passer l'id du thème, passer tout le thème
-
 
 const _chapitres={
-	"calcul_mental":{
-		"nom": "Calcul mental",
-		"themes":["tables_parentheses1","multiplication1","tables_logique1"],
-		"etiquettes":[]
-	},
 	"geom_elementaire":{
 		"nom": "Géométrie élémentaire",
 		"themes":["quadrilateres","symetries"],
 		"etiquettes":[]
 	},
-	"calcul_mental2":{
-		"nom": "Calcul littéral",
-		"themes":["fractions1","calcul_litt1","calcul_litt2","facto1","calcul_litt3","discriminants1"],
+	"calcul_mental":{
+		"nom": "Calcul mental",
+		"themes":["multiplication1","tables_logique1","fractions1","calcul_litt1","calcul_litt2","facto1","calcul_litt3"],
 		"etiquettes":[]
 	},
 	"racines":{
@@ -492,19 +432,9 @@ const _chapitres={
 		"themes":["sqrt1","sqrt2","sqrt3"],
 		"etiquettes":[]
 	},
-	"Introduction aux fonctions":{
-		"nom": "Introduction aux fonctions",
-		"themes":["fonctions_affines"],
-		"etiquettes":[]
-	},
 	"domaines":{
 		"nom": "Domaines de définition",
 		"themes":["domaines_zero","domaines_sqrt","domaines_log","domaines_red"],
-		"etiquettes":[]
-	},
-	"suites":{
-		"nom": "Suites arithmétiques",
-		"themes":["suites_arithmetiques","suites_arithmetiques_variations","sommes_arithmetiques"],
 		"etiquettes":[]
 	},
 	"analyse":{
